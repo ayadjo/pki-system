@@ -1,4 +1,4 @@
-package config;
+package com.example.demo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +16,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import auth.RestAuthenticationEntryPoint;
-import auth.TokenAuthenticationFilter;
-import service.CustomUserDetailsService;
-import util.TokenUtils;
+import com.example.demo.auth.RestAuthenticationEntryPoint;
+import com.example.demo.auth.TokenAuthenticationFilter;
+import com.example.demo.service.CustomUserDetailsService;
+import com.example.demo.util.TokenUtils;
 @Configuration
 // Injektovanje bean-a za bezbednost
 @EnableWebSecurity
@@ -61,10 +61,6 @@ public class WebSecurityConfig {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Bean
-    public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
-        return new RestAuthenticationEntryPoint();
-    }
 
     // Registrujemo authentication manager koji ce da uradi autentifikaciju korisnika za nas
     @Bean
@@ -76,10 +72,7 @@ public class WebSecurityConfig {
     @Autowired
     private TokenUtils tokenUtils;
 
-    @Bean
-    public TokenUtils tokenUtils() {
-        return new TokenUtils();
-    }
+
 
     // Definisemo prava pristupa za zahteve ka odredjenim URL-ovima/rutama
     @Bean
@@ -92,7 +85,8 @@ public class WebSecurityConfig {
 
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
-        http.authorizeRequests().antMatchers("/auth/**").permitAll()
+        http.authorizeRequests().antMatchers("/auth/**").permitAll();
+        http.authorizeRequests().antMatchers("/auth/login").permitAll()
                 // ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
                 // koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi
                 // samo korisnik koji ima rolu 'ADMIN', navodimo na sledeci nacin:

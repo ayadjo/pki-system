@@ -1,12 +1,11 @@
-package controller;
+package com.example.demo.controller;
 
 
-import dto.JwtAuthenticationRequest;
-import dto.UserTokenState;
+import com.example.demo.dto.JwtAuthenticationRequest;
+import com.example.demo.dto.UserTokenState;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,15 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 
-
-
-
-import model.User;
-import service.UserService;
-import util.TokenUtils;
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
+import com.example.demo.util.TokenUtils;
 
 
 @RestController

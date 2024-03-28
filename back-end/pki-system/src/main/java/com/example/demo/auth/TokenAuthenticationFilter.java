@@ -1,4 +1,4 @@
-package auth;
+package com.example.demo.auth;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.Filter;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
-import util.TokenUtils;
+import com.example.demo.util.TokenUtils;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 

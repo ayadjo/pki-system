@@ -1,0 +1,11 @@
+<div class="login-container">
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="!submitted" [formGroup]="form" class="login-form">
+        <!--<img src="assets/images/login.png" alt="Login Image" class="login-image">-->
+        <input formControlName="email" matInput placeholder="email" required>
+
+        <input formControlName="password" matInput placeholder="password" required type="password">
+        <button [disabled]="!loginForm.form.valid" color="primary"
+            type="submit" class="login">Log in</button>
+
+    </form>
+</div>

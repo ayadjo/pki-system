@@ -1,11 +1,12 @@
-package util;
+package com.example.demo.util;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import model.*;
+import com.example.demo.model.Role;
+import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package auth;
+package com.example.demo.auth;
 
 import java.io.IOException;
 

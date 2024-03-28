@@ -1,5 +1,6 @@
-package model;
+package com.example.demo.model;
 
+import com.example.demo.model.Permission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import lombok.Getter;

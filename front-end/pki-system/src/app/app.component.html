@@ -4,12 +4,12 @@
     <a class="app-name">PKI System</a>
   </div>
   <div>
-    <button mat-button class="logButton" color="primary" >Log In</button>
-    <button mat-button class="logButton" color="primary" >Logout</button>
+    <button *ngIf="user && user.mail === ''" class="logButton" mat-button color="primary" (click)="logIn()"><span>Login</span></button>
+    <button *ngIf="user && user.mail !== ''" class="logButton" mat-button  color="primary" (click)="logout()">Log out</button>
   </div>
 </mat-toolbar>
-<app-home></app-home>
-<router-outlet></router-outlet>
+<app-home *ngIf="isHomeRoute"></app-home>
+<router-outlet *ngIf="!isHomeRoute"></router-outlet>
 <app-services></app-services>
 <app-footer></app-footer>
 

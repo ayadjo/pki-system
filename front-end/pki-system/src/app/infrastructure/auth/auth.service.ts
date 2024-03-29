@@ -62,6 +62,7 @@ export class AuthService {
         this.access_token = res.body.accessToken;
         localStorage.setItem("jwt", res.body.accessToken)
         this.userService.getMyInfo(user.mail);
+        this.setUser();
         return res;
       }));
   }
@@ -100,7 +101,8 @@ export class AuthService {
     this.userService.currentUser = null;
     localStorage.removeItem("jwt");
     this.access_token = null;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
+    this.user$.next({id: 0, mail: "", password: "", roles: [{ id: 0, name: '', permissions: [] }], commonName: "", surname : "", givenName : "", organization : "", organizationUnit : "", country:"" })
   }
 
   tokenIsPresent() {

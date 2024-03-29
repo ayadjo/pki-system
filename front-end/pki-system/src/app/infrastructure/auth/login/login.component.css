@@ -11,7 +11,7 @@
   }
   
   .login-form {
-    border: 2px solid #2f8cc3; /* Dodato: okvir */
+    border: 2px solid rgb(35, 35, 53); /* Dodato: okvir */
     width: 250px;
     background-color: #fff;
     border-radius: 10px;
@@ -29,7 +29,7 @@
   }
   
   .login {
-    background-color: #2f8cc3; 
+    background-color: rgb(178, 140, 69); 
     border: none;
     border-radius: 20px; 
     color: white; 
@@ -42,8 +42,8 @@
   
   .login:hover {
     background-color: white; 
-    color: #2f8cc3;
-    border: 2px solid #2f8cc3;
+    color: rgb(35, 35, 53);
+    border: 2px solid rgb(35, 35, 53);
   }
   
   .invalid-field {

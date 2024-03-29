@@ -2,17 +2,12 @@ package com.example.demo.model;
 
 import javax.persistence.*;
 
-import com.example.demo.model.Permission;
-import com.example.demo.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -28,11 +23,9 @@ public class User implements UserDetails {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private List<Role> roles;
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     private String commonName;
 
@@ -46,28 +39,20 @@ public class User implements UserDetails {
 
     private String country;
 
-    public String getRoleName() {
-        return roles.get(0).getName();
-    }
 
-    public Role getRole(){
-        return roles.get(0);
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Permission> permissions = new HashSet<Permission>();
-        for(Role role : this.roles){
-            for(Permission permission : role.getPermissions()){
-                permissions.add(permission);
-            }
-        }
-        return permissions;
+    public User() {
     }
 
     @Override
     public String getUsername() {
         return mail;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(this.role);
+        return roles;
     }
 
     @Override

@@ -59,15 +59,13 @@ public class TokenUtils {
      * @return JWT token
      */
     public String generateToken(User user) {
-        List<String> roles = user.getRoles().stream()
-                .map(Role::getName)
-                .collect(Collectors.toList());
+        String role = String.valueOf(user.getRole());
 
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(user.getMail())
                 .claim("id", user.getId())
-                .claim("roles", roles)
+                .claim("role", role)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())

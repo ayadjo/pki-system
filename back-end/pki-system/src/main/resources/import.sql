@@ -1,0 +1,1 @@
+INSERT INTO public.users (id, common_name, country, given_name, mail, organization, organization_unit, password, surname) VALUES (1,'Admin Admin', 'Serbia', 'Admin', 'admin@gmail.com', 'PKI', 'PKI-Novi Sad', '$2a$10$lhYgvOwC1Q.fxzQBkwVNI.xqwKaoQiY6Gum5fzeN9jsuYStzORNGi', 'Admin');

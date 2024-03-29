@@ -1,0 +1,27 @@
+.main-image{
+    width: 500px;
+    height: 500px;
+    margin-left: 200px;
+    margin-top: 60px;
+  }
+
+.home{
+    display: flex;
+}
+
+.home-right{
+    margin-top: 180px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(35, 35, 53);
+}
+
+.description{
+    font-size: 3.0vw;
+    font-weight: 400;
+    margin-bottom: 1px;
+}
+
+.pki{
+    font-size: 1.1vw;
+    font-weight: 350;
+}

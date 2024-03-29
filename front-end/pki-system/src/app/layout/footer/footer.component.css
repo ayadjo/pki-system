@@ -1,0 +1,36 @@
+.footer {
+    bottom: 0;
+    left: 0;
+    background-color: rgb(178, 140, 69);
+    color: #fff;
+    padding: 20px;
+    overflow: hidden; /* Clearfix za parent element */
+    pointer-events: none;
+}
+
+
+.footer-content {
+    text-align: left; /* Poravnaj na levoj strani */
+    float: left; /* Pomakni na levo */
+}
+
+.footer-copyright {
+    text-align: right; /* Poravnaj na desnoj strani */
+    float: right; /* Pomakni na desno */
+    margin-right: 17px;
+}
+
+.footer-content p,
+.footer-copyright p {
+    margin: 0;
+    margin-left: 17px;
+}
+
+.footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

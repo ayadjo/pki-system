@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit{
       .subscribe({
         next: data => {
           console.log(data);
-          //this.router.navigate(['/view-company']);
+          this.router.navigate(['/']);
         },
         error: error => {
           console.log(error);

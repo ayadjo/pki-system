@@ -16,7 +16,10 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -118,22 +121,15 @@ public class CertificateService {
     }
 
 
-    public String getIssuerCertificateSerialNumber(String userMail) {
-        CertificateData certificateData = certificateRepository.findByIssuerMail(userMail);
-        if (certificateData != null) {
-            return certificateData.getSerialNumber();
-        } else {
-            return null;
-        }
-    }
 
-    public CertificateType getIssuerCertificateType(String userMail) {
-        CertificateData certificateType = certificateRepository.findByIssuerMail(userMail);
-        if (certificateType != null) {
-            return certificateType.getCertificateType();
-        } else {
-            return null;
+    public List<CertificateData> getRootAndCACertificates(){
+        List<CertificateData> certificates = new ArrayList<>();
+        for(CertificateData c : certificateRepository.findAll()){
+            if(c.getCertificateType() != CertificateType.EE){
+                certificates.add(c);
+            }
         }
+        return certificates;
     }
 
 

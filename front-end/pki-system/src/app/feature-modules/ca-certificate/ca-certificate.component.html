@@ -1,5 +1,36 @@
 <div class="container">
   <h1 class="title">Create CA certificate</h1>
+<br>
+  <h2 class="title">Choose certificate</h2>
+  <div>
+    <table>
+        <thead>
+            <tr>
+                <th>certificateType</th>
+                <th>issuerMail</th>
+                <th>subjectMail</th>
+                <th>startDate</th>
+                <th>endDate</th>
+                <th>Serial number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cert of certificates" 
+                (click)="onCertSelect(cert)" 
+                [class.selected]="cert === selectedCert">
+                <td>{{ cert.certificateType }}</td>
+                <td>{{ cert.issuerMail }}</td>
+                <td>{{ cert.subjectMail }}</td>                   
+                <td>{{ cert.startDate }}</td>
+                <td>{{ cert.endDate }}</td>
+                <td>{{ cert.serialNumber }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<h2 class="title">Choose client</h2>
+<br>
   <div>
       <table>
           <thead>

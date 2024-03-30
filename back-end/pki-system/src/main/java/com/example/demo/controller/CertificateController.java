@@ -2,11 +2,18 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CertificateDto;
 import com.example.demo.dto.RootCertificateDto;
+import com.example.demo.dto.UserDto;
+import com.example.demo.model.CertificateData;
+import com.example.demo.model.User;
 import com.example.demo.model.enumerations.CertificateType;
 import com.example.demo.service.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -27,24 +34,18 @@ public class CertificateController {
         certificateService.createCACertificate(dto, filePass);
     }
 
-    @GetMapping("/serialNumber/{issuerMail}")
-    public ResponseEntity<String> getIssuerCertificateSerialNumber(@PathVariable String issuerMail) {
-        String serialNumber = certificateService.getIssuerCertificateSerialNumber(issuerMail);
-        if (serialNumber != null) {
-            return ResponseEntity.ok(serialNumber);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
-    @GetMapping("/issuerCertificateType/{issuerMail}")
-    public ResponseEntity<CertificateType> getIssuerCertificateType(@PathVariable String issuerMail) {
-        CertificateType type = certificateService.getIssuerCertificateType(issuerMail);
-        if (type != null) {
-            return ResponseEntity.ok(type);
-        } else {
-            return ResponseEntity.notFound().build();
+    @GetMapping(value = "/rootAndCA")
+    public ResponseEntity<List<CertificateData>> getRootAndCACertificates() {
+
+        List<CertificateData> certificates = certificateService.getRootAndCACertificates();
+
+        List<CertificateData> cert = new ArrayList<>();
+        for (CertificateData u : certificates) {
+            cert.add(u);
         }
+
+        return new ResponseEntity<>(cert, HttpStatus.OK);
     }
 
 

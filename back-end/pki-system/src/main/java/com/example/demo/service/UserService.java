@@ -22,7 +22,7 @@ public class UserService {
     public List<User> getUsers(){
         List<User> clients = new ArrayList<>();
         for(User c : userRepository.findAll()){
-            if(Objects.equals(c.getRole().getName(), "USER")){
+            if(Objects.equals(c.getRole().getName(), "USER" )){
                 clients.add(c);
             }
         }

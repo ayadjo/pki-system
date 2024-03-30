@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CertificateRepository  extends JpaRepository<CertificateData, String> {
 
-    CertificateData findByIssuerMail(String issuerMail);
 
 }

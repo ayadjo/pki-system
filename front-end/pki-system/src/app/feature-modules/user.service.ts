@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../infrastructure/auth/model/user.model';
 import { Observable } from 'rxjs';
 import { CertificateType } from './certificates/model/certificateDto.model';
+import { Certificate } from '../infrastructure/auth/model/certificate.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,20 +41,11 @@ export class UserService {
     return this.http.post<any>(`http://localhost:8080/certificates/ca-certificate/${filePass}`, requestBody);
   }
 
-  getIssuerCertificateSerialNumber(issuerMail: string): Observable<string> {
-    return this.http.get<string>(`http://localhost:8080/certificates/serialNumber/${issuerMail}`);
-  }
-
-  getIssuerCertificateType(issuerMail: string): Observable<CertificateType> {
-    return this.http.get<CertificateType>(`http://localhost:8080/certificates/issuerCertificateType/${issuerMail}`);
-  }
-
-  getSubjectCertificateType(subjectMail: string): Observable<CertificateType> {
-    return this.http.get<CertificateType>(`http://localhost:8080/certificates/subjectCertificateType/${subjectMail}`);
-  }
-
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>('http://localhost:8080/users/all');
+  }
+  getRootAndCA(): Observable<Certificate[]> {
+    return this.http.get<Certificate[]>('http://localhost:8080/certificates/rootAndCA');
   }
   
 }

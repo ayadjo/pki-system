@@ -1,13 +1,16 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.RootCertificateDto;
+import com.example.demo.keystores.KeyStoreWriter;
 import com.example.demo.model.IssuerData;
+import com.example.demo.model.KeyStoreAccess;
 import com.example.demo.model.SubjectData;
 import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
 
@@ -28,5 +31,9 @@ public class CertificateService {
         X509Certificate certificate= certificateGeneratorService.generateCertificate(subjectData,issuerData);
 
         //KeyStore
+        KeyStoreWriter keyStoreWriter = new KeyStoreWriter();
+        keyStoreWriter.loadKeyStore(null, KeyStoreAccess.password.toCharArray());
+        keyStoreWriter.write(certificate.getSerialNumber().toString(),keyPair.getPrivate(),KeyStoreAccess.password.toCharArray(),new Certificate[]{certificate});
+        keyStoreWriter.saveKeyStore(certificate.getSerialNumber().toString() + ".jks", KeyStoreAccess.password.toCharArray());
     }
 }

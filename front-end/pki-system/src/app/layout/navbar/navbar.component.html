@@ -1,0 +1,29 @@
+<mat-toolbar class="navbar">
+    <div class="navbar-left">
+      <div class="navbar-menu">
+        <button class="logButton" mat-button [matMenuTriggerFor]="menu">Menu</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item color="primary" [routerLink]="['']">Home</button>
+          <button mat-menu-item color="primary" [matMenuTriggerFor]="certificateMenu">Certificate Generator</button>
+          <mat-menu #certificateMenu="matMenu">
+            <button mat-menu-item color="primary">Root Certificate</button>
+            <button mat-menu-item color="primary">CA Certificate</button>
+            <button mat-menu-item color="primary">End Entity</button>
+          </mat-menu>
+        </mat-menu>
+      </div>
+      <div class="logo-wrapper">
+        <img src="../assets/security.png" alt="logo" class="logo">
+        <a class="app-name">PKI System</a>
+      </div>
+    </div>
+    <div>
+      <button *ngIf="user && user.mail === ''" class="logButton" mat-button color="primary" (click)="logIn()">
+        <span>Login</span>
+      </button>
+      <button *ngIf="user && user.mail !== ''" class="logButton" mat-button color="primary" (click)="logout()">
+        Log out
+      </button>
+    </div>
+  </mat-toolbar>
+  

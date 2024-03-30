@@ -1,0 +1,66 @@
+
+.navbar .logButton {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 320;
+    font-size: 0.9vw;
+    text-decoration: none;
+    color: #fff;
+    border-color: #fff;
+    border-width: 2px;
+  }
+
+
+  .menuButton {
+    font-weight: 350;
+    text-decoration: none; 
+    color: #fff; 
+  }
+
+  .logo {
+    margin-top: 10px; /* Povećavamo margin-top kako bi logo bio centriran vertikalno */
+    margin-right: 10px; /* Dodajemo margin-right kako bi bio razmak između loga i naziva aplikacije */
+    height: 30px;
+    width: 30px;
+    border-radius: 10%;
+    margin-left: 600px;
+  }
+  
+  .app-name {
+    color: #fff;
+    font-size: 1.1vw;
+    font-weight: 320;
+    margin-top: 10px; /* Povećavamo margin-top kako bi tekst bio centriran vertikalno */
+  }
+  
+  .navbar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    width: calc(100vw - 20px); /* Koristimo calc funkciju za izračunavanje širine */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(35, 35, 53);
+    height: 50px;
+    justify-content: space-between;
+    z-index: 500;
+    
+  }
+  
+  .navbar-left {
+    display: flex;
+    align-items: center; /* Centriramo elemente vertikalno */
+  }
+  
+  .navbar-menu {
+    margin-right: 10px; /* Dodajemo margin-right kako bi bilo razmaka između dugmeta "Menu" i ikonice loga */
+  }
+  
+  .menuButton {
+    font-weight: 350;
+    text-decoration: none;
+    color: #fff;
+  }
+  
+
+
+  
+

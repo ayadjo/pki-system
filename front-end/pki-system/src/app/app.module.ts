@@ -15,7 +15,9 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavbarComponent } from './layout/navbar/navbar.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 @NgModule({

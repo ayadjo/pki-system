@@ -8,6 +8,7 @@
     width: 600px;
     margin: 50px auto; /* Centriranje po horizontali, sa 50px margine na vrhu i dnu */
     padding: 20px;
+    min-height: 75vh;
   }
 
 .title {
@@ -84,3 +85,20 @@
   td {
     font-size: 12px;
   }
+
+  .filePass-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.filePass {
+    margin-right: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+.selected {
+  background-color: lightblue; /* Change to your desired background color */
+}

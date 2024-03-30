@@ -8,6 +8,7 @@
     width: 600px;
     margin: 50px auto; /* Centriranje po horizontali, sa 50px margine na vrhu i dnu */
     padding: 20px;
+    min-height: 75vh;
   }
 
 .title {

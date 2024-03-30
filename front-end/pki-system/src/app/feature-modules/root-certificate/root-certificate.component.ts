@@ -12,6 +12,8 @@ export class RootCertificateComponent {
   startDate: Date | null = null;
   endDate: Date | null = null;
   userId!: number;
+  userMail: string | undefined;
+  filePass: string | undefined;
 
   constructor(private userService: UserService, 
               private authService: AuthService, 
@@ -23,14 +25,15 @@ export class RootCertificateComponent {
       this.authService.user$.subscribe(user => {
         if (user.id) {
           this.userId = user.id;
+          this.userMail = user.mail;
         }
       });
     }
   }
 
   onCreate(): void {
-    if (this.startDate && this.endDate && this.userId) {
-      this.userService.createRootCertificate(this.startDate, this.endDate, this.userId)
+    if (this.startDate && this.endDate &&  this.userMail && this.filePass) {
+      this.userService.createRootCertificate(this.startDate, this.endDate, this.userMail, this.filePass)
         .subscribe(
           () => {
             alert("Root certificate created successfully!");
@@ -40,8 +43,8 @@ export class RootCertificateComponent {
           }
         );
     } else {
-      console.error('Missing required data: startDate, endDate or userId');
-      alert("Missing required data: startDate or endDate.");
+      console.error('Missing required data: startDate, endDate, userId or filePass');
+      alert("Missing required data: startDate, endDate, userId or filePass.");
     }
   }
   

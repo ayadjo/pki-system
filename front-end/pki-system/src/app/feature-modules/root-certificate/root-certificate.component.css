@@ -63,3 +63,16 @@
     color: rgb(35, 35, 53);
     border: 2px solid rgb(35, 35, 53);
   }
+
+  .filePass-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.filePass {
+    margin-right: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}

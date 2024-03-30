@@ -1,15 +1,5 @@
-<mat-toolbar class="navbar">
-  <div class="navbar-left">
-    <img src="../assets/security.png" alt="logo" class="logo">
-    <a class="app-name">PKI System</a>
-  </div>
-  <div>
-    <button *ngIf="user && user.mail === ''" class="logButton" mat-button color="primary" (click)="logIn()"><span>Login</span></button>
-    <button *ngIf="user && user.mail !== ''" class="logButton" mat-button  color="primary" (click)="logout()">Log out</button>
-  </div>
-</mat-toolbar>
+<app-navbar></app-navbar>
 <app-home *ngIf="isHomeRoute"></app-home>
 <router-outlet *ngIf="!isHomeRoute"></router-outlet>
-<app-services></app-services>
 <app-footer></app-footer>
 

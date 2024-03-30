@@ -13,6 +13,10 @@ import { LayoutModule } from './layout/layout.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavbarComponent } from './layout/navbar/navbar.component';
+
 
 
 @NgModule({
@@ -31,7 +35,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     LayoutModule,
     MatFormFieldModule,
     CommonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatMenuModule,
+    BrowserAnimationsModule,
   ],
   providers: [ 
     {

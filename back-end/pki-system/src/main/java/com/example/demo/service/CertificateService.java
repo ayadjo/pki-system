@@ -2,10 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.RootCertificateDto;
 import com.example.demo.keystores.KeyStoreWriter;
-import com.example.demo.model.IssuerData;
-import com.example.demo.model.KeyStoreAccess;
-import com.example.demo.model.SubjectData;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
+import com.example.demo.repository.CertificateRepository;
 import com.example.demo.repository.KeyStoreAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.security.KeyPair;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.security.cert.Certificate;
+
 
 @Service
 public class CertificateService {
@@ -27,6 +25,9 @@ public class CertificateService {
 
     @Autowired
     private KeyStoreAccessRepository keyStoreAccessRepository;
+
+    @Autowired
+    private CertificateRepository certificateRepository;
     public void createRootCertificate(RootCertificateDto root, String pass) {
         if (root == null || pass == null) {
             // Ovde možete dodati odgovarajući tretman za null vrednosti
@@ -43,6 +44,11 @@ public class CertificateService {
         SubjectData subjectData = certificateGeneratorService.generateSubjectData(keyPair, issuer, root.getStartDate(), root.getEndDate());
         IssuerData issuerData = certificateGeneratorService.generateIssuerData(keyPair.getPrivate(), issuer);
         X509Certificate certificate = certificateGeneratorService.generateCertificate(subjectData, issuerData);
+
+        CertificateData cert = new CertificateData();
+        cert.setSerialNumber(certificate.getSerialNumber().toString());
+        cert.setRevoked(false);
+        certificateRepository.save(cert);
 
         String fileName = certificate.getSerialNumber().toString() + ".jks";
         String filePass = hashPassword(pass);

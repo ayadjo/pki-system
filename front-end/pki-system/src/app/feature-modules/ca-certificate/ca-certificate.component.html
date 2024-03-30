@@ -1,0 +1,32 @@
+<div class="container">
+    <h1 class="title">Create CA certificate</h1>
+    <div>
+        <table>
+            <thead>
+              <tr>
+                <th>Mail</th>
+                <th>Organization unit</th>
+                <th>Name</th>
+                <th>Country</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.mail }}</td>
+                    <td>{{ user.organizationUnit }}</td>
+                    <td>{{ user.commonName }}</td>                   
+                    <td>{{ user.country }}</td>
+                </tr>
+            </tbody>
+          </table>
+          
+    </div>
+    <div class="date-picker">
+        <label class="startDateLabel">Start Date</label>
+        <input type="date" id="startDate" name="startDate" class="startDate"><br><br>
+        <label class="endDateLabel">End Date</label>
+        <input type="date" id="endDate" name="endDate" class="endDate"><br><br>
+    </div>  
+    <button class="create">Create</button>
+</div>
+  

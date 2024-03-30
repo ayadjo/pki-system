@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Router } from '@angular/router';
 import { ApiService } from './service/api.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserService } from '../../feature-modules/user/user.service';
+import { UserService } from '../../feature-modules/user.service';
 
 @Injectable({
   providedIn: 'root'

@@ -6,7 +6,7 @@ import { LoginComponent } from './infrastructure/auth/login/login.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { UserModule } from './feature-modules/user/user.module';
+import { UserModule } from './feature-modules/user.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { TokenInterceptor } from './infrastructure/auth/interceptor/TokenInterceptor';
 import { LayoutModule } from './layout/layout.module';
@@ -16,6 +16,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './layout/navbar/navbar.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -38,6 +39,7 @@ import { NavbarComponent } from './layout/navbar/navbar.component';
     MatToolbarModule,
     MatMenuModule,
     BrowserAnimationsModule,
+    NoopAnimationsModule
   ],
   providers: [ 
     {

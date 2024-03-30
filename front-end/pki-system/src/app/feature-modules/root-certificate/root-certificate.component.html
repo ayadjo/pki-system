@@ -2,9 +2,14 @@
     <h1 class="title">Create root certificate</h1>
     <div class="date-picker">
         <label class="startDateLabel">Start Date</label>
-        <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate"><br><br>
+        <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate">
         <label class="endDateLabel">End Date</label>
-        <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate"><br><br>
+        <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate">
     </div>  
+    <br>
+    <div class="filePass-container">
+        <label class="filePass">File password</label>
+        <input type="password" id="filePass" name="filePass" class="filePass" [(ngModel)]="filePass">
+    </div>
     <button class="create" (click)="onCreate()">Create</button>
 </div>

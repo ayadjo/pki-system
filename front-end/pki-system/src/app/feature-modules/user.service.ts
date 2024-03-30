@@ -29,7 +29,9 @@ export class UserService {
     return this.http.get<User>(`http://localhost:8080/user/getByEmail/${mail}`);
   }
 
-  createRootCertificate(startDate: Date, endDate: Date, userId: number) : Observable<any> {
-    throw new Error('Method not implemented.');
+  createRootCertificate(startDate: Date, endDate: Date, issuerMail: string, filePass: string): Observable<any> {
+    const requestBody = { startDate, endDate, issuerMail };
+    return this.http.post<any>(`http://localhost:8080/certificates/root-certificate/${filePass}`, requestBody);
   }
+  
 }

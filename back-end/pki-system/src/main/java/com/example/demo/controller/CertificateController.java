@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api/certificates")
+@RequestMapping("/certificates")
 public class CertificateController {
 
     @Autowired
     private CertificateService certificateService;
 
 
-    @PostMapping("/root-certificate")
-    public void addRootCertificate(@RequestBody RootCertificateDto dto){
-        certificateService.createRootCertificate(dto);
+    @PostMapping("/root-certificate/{filePass}")
+    public void addRootCertificate(@RequestBody RootCertificateDto dto, @PathVariable String filePass){
+       certificateService.createRootCertificate(dto, filePass);
     }
 }

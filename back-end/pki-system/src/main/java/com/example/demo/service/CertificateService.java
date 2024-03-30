@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.RootCertificateDto;
 import com.example.demo.keystores.KeyStoreWriter;
 import com.example.demo.model.*;
+import com.example.demo.model.enumerations.CertificateType;
 import com.example.demo.repository.CertificateRepository;
 import com.example.demo.repository.KeyStoreAccessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,11 @@ public class CertificateService {
         CertificateData cert = new CertificateData();
         cert.setSerialNumber(certificate.getSerialNumber().toString());
         cert.setRevoked(false);
+        cert.setCertificateType(CertificateType.ROOT);
+        cert.setIssuerMail(issuer.getMail());
+        cert.setSubjectMail(issuer.getMail());
+        cert.setStartDate(root.getStartDate());
+        cert.setEndDate(root.getEndDate());
         certificateRepository.save(cert);
 
         String fileName = certificate.getSerialNumber().toString() + ".jks";

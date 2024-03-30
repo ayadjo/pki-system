@@ -4,12 +4,22 @@
     <a class="app-name">PKI System</a>
   </div>
   <div>
+    <button class="generateButton" *ngIf="user && user.mail !== ''" [matMenuTriggerFor]="certificateMenu" mat-button color="primary">
+      <span style="color: #fff;">Generate certificate</span>
+    </button>
+    <mat-menu #certificateMenu="matMenu">
+      <button mat-menu-item color="primary" [routerLink]="['create-root']" *ngIf="user && user.mail !== ''" routerLinkActive="active-link">Root</button>
+      <button mat-menu-item color="primary" [routerLink]="['create-ca']" *ngIf="user && user.mail !== ''" routerLinkActive="active-link">CA</button>
+      <button mat-menu-item color="primary" [routerLink]="['create-end-entity']" *ngIf="user && user.mail !== ''" routerLinkActive="active-link">End-entity</button>
+      <button mat-menu-item color="primary" [routerLink]="['certificates-overview']" *ngIf="user && user.mail !== ''" routerLinkActive="active-link">All certificates</button>
+    </mat-menu>
     <button *ngIf="user && user.mail === ''" class="logButton" mat-button color="primary" (click)="logIn()"><span>Login</span></button>
-    <button *ngIf="user && user.mail !== ''" class="logButton" mat-button  color="primary" (click)="logout()">Log out</button>
+    <button *ngIf="user && user.mail !== ''" class="logButton" mat-button color="primary" (click)="logout()">Log out</button>
   </div>
 </mat-toolbar>
+
+
 <app-home *ngIf="isHomeRoute"></app-home>
 <router-outlet *ngIf="!isHomeRoute"></router-outlet>
 <app-services></app-services>
 <app-footer></app-footer>
-

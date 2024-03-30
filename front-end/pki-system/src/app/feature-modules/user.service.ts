@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../../infrastructure/auth/model/user.model';
+import { User } from '../infrastructure/auth/model/user.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -27,5 +27,9 @@ export class UserService {
 
   getUserDetails(mail: string): Observable<User> {
     return this.http.get<User>(`http://localhost:8080/user/getByEmail/${mail}`);
+  }
+
+  createRootCertificate(startDate: Date, endDate: Date, userId: number) : Observable<any> {
+    throw new Error('Method not implemented.');
   }
 }

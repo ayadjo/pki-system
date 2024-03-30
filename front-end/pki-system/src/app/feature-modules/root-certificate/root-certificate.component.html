@@ -1,0 +1,10 @@
+<div class="container">
+    <h1 class="title">Create root certificate</h1>
+    <div class="date-picker">
+        <label class="startDateLabel">Start Date</label>
+        <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate"><br><br>
+        <label class="endDateLabel">End Date</label>
+        <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate"><br><br>
+    </div>  
+    <button class="create" (click)="onCreate()">Create</button>
+</div>

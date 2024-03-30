@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { User } from '../model/user.model';
-import { UserService } from '../../../feature-modules/user/user.service';
+import { UserService } from '../../../feature-modules/user.service';
 
 @Component({
   selector: 'app-login',

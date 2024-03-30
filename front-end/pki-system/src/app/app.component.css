@@ -33,3 +33,22 @@
     border-color: #fff;
     border-width: 2px;
   }
+
+.generateButton {
+  margin-right: 650px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 320;
+  font-size: 0.9vw;
+  text-decoration: none;
+  color: #fff;
+  border-color: rgb(35, 35, 53);
+  border-width: 2px;
+}
+
+.certificate-menu {
+  position: fixed;
+  bottom: 50px; /* Visina footera */
+  right: 0;
+}
+
+

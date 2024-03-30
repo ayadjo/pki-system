@@ -118,7 +118,7 @@ public class CertificateService {
     }
 
 
-    public String getCertificateSerialNumber(String userMail) {
+    public String getIssuerCertificateSerialNumber(String userMail) {
         CertificateData certificateData = certificateRepository.findByIssuerMail(userMail);
         if (certificateData != null) {
             return certificateData.getSerialNumber();

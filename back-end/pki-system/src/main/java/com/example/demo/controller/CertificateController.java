@@ -29,7 +29,7 @@ public class CertificateController {
 
     @GetMapping("/serialNumber/{issuerMail}")
     public ResponseEntity<String> getIssuerCertificateSerialNumber(@PathVariable String issuerMail) {
-        String serialNumber = certificateService.getCertificateSerialNumber(issuerMail);
+        String serialNumber = certificateService.getIssuerCertificateSerialNumber(issuerMail);
         if (serialNumber != null) {
             return ResponseEntity.ok(serialNumber);
         } else {

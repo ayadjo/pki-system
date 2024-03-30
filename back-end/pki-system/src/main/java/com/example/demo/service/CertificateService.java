@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.security.cert.Certificate;
 
@@ -56,6 +57,7 @@ public class CertificateService {
         keyStoreAccess.setFileName(fileName);
         keyStoreAccess.setFilePass(filePass);
         keyStoreAccessRepository.save(keyStoreAccess); // Assuming you have a repository to save KeyStoreAccess
+
     }
 
     private String hashPassword(String password) {

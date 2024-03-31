@@ -63,6 +63,33 @@
         <label class="endDateLabel">End Date</label>
         <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate"><br><br>
     </div>  
+    <div class="extensions">
+        <div class="keyUsages">
+            <p class="keyUsagesLabel"><b>Key Usages</b></p>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.DIGITAL_SIGNATURE"> Digital signature</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.NON_REPUDIATION"> Non-repudiation</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.KEY_ENCIPHER"> Key encipherment</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.DATA_ENCIPHER"> Data encipherment</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.KEY_AGREEMENT"> Key agreement</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.CERTIFICATE_SIGNING"> Certificate signing</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.CRL_SIGNING"> CRL signing</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.ENCIPHER_ONLY"> Encipher only</label><br>
+            <label><input type="checkbox" [(ngModel)]="keyUsage.DECIPHER_ONLY"> Decipher only</label><br>
+        </div>
+
+        
+        <div class="extendedKeyUsages">
+            <p class="extendedKeyUsagesLabel"><b>Extended Key Usages</b></p>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.TSL_WEB_SERVER_AUTHENTICATION"> TLS Web server authentication</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.TLS_WEB_CLIENT_AUTHENTICATION"> TLS Web client authentication</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.SIGN_EXECUTABLE_CODE"> Sign (downloadable) executable code</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.EMAIL_PROTECTION"> Email protection</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.IPSEC_END_SYSTEM"> IPSEC End System (host or router)</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.IPSEC_TUNNEL"> IPSEC Tunnel</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.IPSEC_USER"> IPSEC User</label><br>
+            <label><input type="checkbox" [(ngModel)]="extendedKeyUsage.TIMESTAMPING"> Timestamping</label><br>
+        </div>
+    </div>  
     <br>
     <div class="filePass-container">
         <label class="filePass">File password</label>

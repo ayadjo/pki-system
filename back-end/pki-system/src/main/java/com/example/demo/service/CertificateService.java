@@ -70,42 +70,7 @@ public class CertificateService {
         IssuerData issuerData = certificateGeneratorService.generateIssuerData(keyPair.getPrivate(), issuer);
         X509Certificate certificate = certificateGeneratorService.generateCertificate(subjectData, issuerData);
 
-        createCertificateEntry(certificate, CertificateType.ROOT, issuer, issuer, root.getStartDate(), root.getEndDate());
-
-        CertificateData cert = new CertificateData();
-        cert.setSerialNumber(certificate.getSerialNumber().toString());
-        cert.setRevoked(false);
-        cert.setCertificateType(CertificateType.ROOT);
-        cert.setIssuerMail(issuer.getMail());
-        cert.setSubjectMail(issuer.getMail());
-        cert.setStartDate(root.getStartDate());
-        cert.setEndDate(root.getEndDate());
-
-        // Postavljanje vrednosti za keyUsages
-        List<KeyUsageExtension> keyUsageList = new ArrayList<>();
-        for (Integer keyUsageInt : keyUsages) {
-            KeyUsageExtension keyUsage = KeyUsageExtension.convertIntegerToKeyUsageExtension(keyUsageInt);
-            if (keyUsage != null) {
-                keyUsageList.add(keyUsage);
-            }
-        }
-        cert.setKeyUsages(keyUsageList);
-
-        // Konvertovanje niza KeyPurposeId u listu ExtendedKey
-        List<ExtendedKey> extendedKeyList = new ArrayList<>();
-        for (KeyPurposeId keyPurposeId : extendedKeyUsages) {
-            ExtendedKey extendedKey = extendedKeyConverter.convertToExtendedKey(keyPurposeId);
-            if (extendedKey != null) {
-                extendedKeyList.add(extendedKey);
-            }
-        }
-
-        // Postavljanje vrednosti za extendedKeyUsages u CertificateData
-        cert.setExtendedKeyUsages(extendedKeyList);
-
-
-
-        certificateRepository.save(cert);
+        createCertificateEntry(certificate, CertificateType.ROOT, issuer, issuer, root.getStartDate(), root.getEndDate(), keyUsages, extendedKeyUsages);
 
         String fileName = certificate.getSerialNumber().toString() + ".jks";
         String filePass = hashPassword(pass);
@@ -142,11 +107,14 @@ public class CertificateService {
         KeyPair subjectKeyPair = certificateGeneratorService.generateKeyPair();
         PrivateKey issuerPrivateKey = keyStoreReader.readPrivateKey(keyStoreAccess.getFileName(), keyStoreAccess.getFilePass(), cert.getIssuerCertificateSerialNumber() + cert.getIssuerMail(), keyStoreAccess.getFilePass());
 
-        SubjectData subjectData = certificateGeneratorService.generateSubjectData(subjectKeyPair, subject, cert.getStartDate(), cert.getEndDate());
+        Integer[] caKeyUsages = keyUsageExtensionConverter.convertKeyUsageToInteger(cert.getKeyUsageExtension());
+        KeyPurposeId[] caExtendedKeyUsages = extendedKeyConverter.convertToExtendedKey(cert.getExtendedKey());
+
+        SubjectData subjectData = certificateGeneratorService.generateSubjectData(subjectKeyPair, subject, cert.getStartDate(), cert.getEndDate(), caKeyUsages, caExtendedKeyUsages);
         IssuerData issuerData = certificateGeneratorService.generateIssuerData(issuerPrivateKey, issuer);
         X509Certificate certificate = certificateGeneratorService.generateCertificate(subjectData, issuerData);
 
-        createCertificateEntry(certificate, CertificateType.CA, issuer, subject, cert.getStartDate(), cert.getEndDate());
+        createCertificateEntry(certificate, CertificateType.CA, issuer, subject, cert.getStartDate(), cert.getEndDate(), caKeyUsages, caExtendedKeyUsages);
 
         Certificate[] certificateChain=createChain(cert.getIssuerCertificateSerialNumber(),cert.getIssuerCertificateSerialNumber()+cert.getIssuerMail(),certificate);
 
@@ -202,11 +170,14 @@ public class CertificateService {
         KeyPair subjectKeyPair = certificateGeneratorService.generateKeyPair();
         PrivateKey issuerPrivateKey = keyStoreReader.readPrivateKey(keyStoreAccess.getFileName(), keyStoreAccess.getFilePass(), cert.getIssuerCertificateSerialNumber() + cert.getIssuerMail(), keyStoreAccess.getFilePass());
 
-        SubjectData subjectData = certificateGeneratorService.generateSubjectData(subjectKeyPair, subject, cert.getStartDate(), cert.getEndDate());
+        Integer[] eeKeyUsages = keyUsageExtensionConverter.convertKeyUsageToInteger(cert.getKeyUsageExtension());
+        KeyPurposeId[] eeExtendedKeyUsages = extendedKeyConverter.convertToExtendedKey(cert.getExtendedKey());
+
+        SubjectData subjectData = certificateGeneratorService.generateSubjectData(subjectKeyPair, subject, cert.getStartDate(), cert.getEndDate(), eeKeyUsages, eeExtendedKeyUsages);
         IssuerData issuerData = certificateGeneratorService.generateIssuerData(issuerPrivateKey, issuer);
         X509Certificate certificate = certificateGeneratorService.generateCertificate(subjectData, issuerData);
 
-        createCertificateEntry(certificate, CertificateType.EE, issuer, subject, cert.getStartDate(), cert.getEndDate());
+        createCertificateEntry(certificate, CertificateType.EE, issuer, subject, cert.getStartDate(), cert.getEndDate(), eeKeyUsages, eeExtendedKeyUsages);
 
         Certificate[] certificateChain=createChain(cert.getIssuerCertificateSerialNumber(),cert.getIssuerCertificateSerialNumber()+cert.getIssuerMail(),certificate);
 
@@ -225,7 +196,7 @@ public class CertificateService {
         keyStoreAccess1.setFilePass(filePass);
         keyStoreAccessRepository.save(keyStoreAccess1);
     }
-    private void createCertificateEntry(X509Certificate certificate, CertificateType certificateType, User issuer, User subject, Date startDate, Date endDate) {
+    private void createCertificateEntry(X509Certificate certificate, CertificateType certificateType, User issuer, User subject, Date startDate, Date endDate, Integer[] keyUsages, KeyPurposeId[] extendedKeyUsages) {
         CertificateData newCert = new CertificateData();
         newCert.setSerialNumber(certificate.getSerialNumber().toString());
         newCert.setRevoked(false);
@@ -234,6 +205,28 @@ public class CertificateService {
         newCert.setSubjectMail(subject.getMail());
         newCert.setStartDate(startDate);
         newCert.setEndDate(endDate);
+
+        // Postavljanje vrednosti za keyUsages
+        List<KeyUsageExtension> keyUsageList = new ArrayList<>();
+        for (Integer keyUsageInt : keyUsages) {
+            KeyUsageExtension keyUsage = KeyUsageExtension.convertIntegerToKeyUsageExtension(keyUsageInt);
+            if (keyUsage != null) {
+                keyUsageList.add(keyUsage);
+            }
+        }
+        newCert.setKeyUsages(keyUsageList);
+
+        // Konvertovanje niza KeyPurposeId u listu ExtendedKey
+        List<ExtendedKey> extendedKeyList = new ArrayList<>();
+        for (KeyPurposeId keyPurposeId : extendedKeyUsages) {
+            ExtendedKey extendedKey = extendedKeyConverter.convertToExtendedKey(keyPurposeId);
+            if (extendedKey != null) {
+                extendedKeyList.add(extendedKey);
+            }
+        }
+
+        // Postavljanje vrednosti za extendedKeyUsages u CertificateData
+        newCert.setExtendedKeyUsages(extendedKeyList);
         certificateRepository.save(newCert);
     }
 

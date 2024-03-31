@@ -52,5 +52,9 @@ export class UserService {
   getRootAndCA(): Observable<Certificate[]> {
     return this.http.get<Certificate[]>('http://localhost:8080/certificates/rootAndCA');
   }
+
+  getAllCertificates(): Observable<Certificate[]> {
+    return this.http.get<Certificate[]>('http://localhost:8080/certificates/all');
+  }
   
 }

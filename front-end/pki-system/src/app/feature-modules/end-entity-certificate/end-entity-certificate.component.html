@@ -14,16 +14,19 @@
               </tr>
           </thead>
           <tbody>
-              <tr *ngFor="let cert of certificates" 
-                  (click)="onCertSelect(cert)" 
-                  [class.selected]="cert === selectedCert">
-                  <td>{{ cert.certificateType }}</td>
-                  <td>{{ cert.issuerMail }}</td>
-                  <td>{{ cert.subjectMail }}</td>                   
-                  <td>{{ cert.startDate | date: 'mediumDate' }}</td>
-                  <td>{{ cert.endDate | date: 'mediumDate' }}</td>
-              </tr>
-          </tbody>
+            <ng-container *ngFor="let cert of certificates">
+                <tr (click)="cert.certificateType !== 'EE' && onCertSelect(cert)" 
+                    [class.selected]="cert === selectedCert" 
+                    [class.disabled]="cert.certificateType === 'EE'">
+                    <td>{{ cert.certificateType }}</td>
+                    <td>{{ cert.issuerMail }}</td>
+                    <td>{{ cert.subjectMail }}</td>                   
+                    <td>{{ cert.startDate | date: 'mediumDate' }}</td>
+                    <td>{{ cert.endDate | date: 'mediumDate' }}</td>
+                </tr>
+            </ng-container>
+        </tbody>
+        
       </table>
   </div>
   <br>
@@ -52,6 +55,8 @@
             </tbody>
         </table>
     </div>
+
+    
     <div class="date-picker">
         <label class="startDateLabel">Start Date</label>
         <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate"><br><br>

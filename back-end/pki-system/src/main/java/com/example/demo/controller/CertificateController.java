@@ -53,6 +53,19 @@ public class CertificateController {
         return new ResponseEntity<>(cert, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<CertificateData>> getCertificates() {
+
+        List<CertificateData> certificates = certificateService.findAll();
+
+        List<CertificateData> cert = new ArrayList<>();
+        for (CertificateData u : certificates) {
+            cert.add(u);
+        }
+
+        return new ResponseEntity<>(cert, HttpStatus.OK);
+    }
+
 
 
 }

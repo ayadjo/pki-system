@@ -53,10 +53,10 @@ export class EndEntityCertificateComponent implements OnInit{
     );
 
     //dobavljanje sertifikata za gornju tabelu
-    this.userService.getRootAndCA()
+    this.userService.getAllCertificates()
     .subscribe(
       (certificates: Certificate[]) => {
-        this.certificates = certificates;
+        this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);
       },
       (error: any) => {
         console.error('Error fetching certificates:', error);
@@ -100,9 +100,9 @@ export class EndEntityCertificateComponent implements OnInit{
         .subscribe(
           () => {
             alert("CA certificate created successfully!");
-            this.userService.getRootAndCA().subscribe(
+            this.userService.getAllCertificates().subscribe(
               (certificates: Certificate[]) => {
-                this.certificates = certificates;
+                this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);
               },
               (error: any) => {
                 console.error('Error fetching certificates:', error);

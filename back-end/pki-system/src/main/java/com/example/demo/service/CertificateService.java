@@ -162,7 +162,7 @@ public class CertificateService {
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
         keyStoreWriter.loadKeyStore(null, filePass.toCharArray());
         assert certificateChain != null;
-        //za end*entity ne cuvamo private key, pravila novi nacin cuvanja 
+        //za end*entity ne cuvamo private key, pravila novi nacin cuvanja
         keyStoreWriter.setCertificateChain(certificate.getSerialNumber().toString() + subject.getMail(), certificateChain, certificate);
         keyStoreWriter.saveKeyStore(fileName, filePass.toCharArray());
 
@@ -195,6 +195,9 @@ public class CertificateService {
         return certificates;
     }
 
+    public List<CertificateData> findAll() {
+        return certificateRepository.findAll();
+    }
 
 
 

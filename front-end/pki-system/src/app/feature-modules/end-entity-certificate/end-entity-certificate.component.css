@@ -110,5 +110,9 @@
   background-color:salmon;
   pointer-events: none;
 }
+.disabled{
+    background-color:salmon;
+    pointer-events: none;
+  }
 
 

@@ -29,8 +29,23 @@ export class UserService {
     return this.http.get<User>(`http://localhost:8080/user/getByEmail/${mail}`);
   }
 
-  createRootCertificate(startDate: Date, endDate: Date, issuerMail: string, filePass: string): Observable<any> {
-    const requestBody = { startDate, endDate, issuerMail };
+  createRootCertificate(startDate: Date, endDate: Date, issuerMail: string, filePass: string, keyUsage: string[], extendedKey: string[]): Observable<any> {
+    /*const keyUsageArray = [];
+    for (const [key, value] of Object.entries(keyUsage)) {
+        if (value) {
+            keyUsageArray.push(key);
+        }
+    }*/
+
+    const requestBody = {
+      issuerMail: issuerMail,
+      startDate: startDate, 
+      endDate: endDate,
+      keyUsageExtension: keyUsage,
+      extendedKey: extendedKey
+    };
+
+    //const requestBody = { startDate, endDate, issuerMail, keyUsage: keyUsage.map(key => ({ key })), extendedKey };
     return this.http.post<any>(`http://localhost:8080/certificates/root-certificate/${filePass}`, requestBody);
   }
   

@@ -6,9 +6,9 @@
           <button mat-menu-item color="primary" [routerLink]="['']">Home</button>
           <button mat-menu-item color="primary" [matMenuTriggerFor]="certificateMenu">Certificate Generator</button>
           <mat-menu #certificateMenu="matMenu">
-            <button mat-menu-item color="primary">Root Certificate</button>
-            <button mat-menu-item color="primary">CA Certificate</button>
-            <button mat-menu-item color="primary">End Entity</button>
+            <button mat-menu-item color="primary" [routerLink]="['create-root']">Root Certificate</button>
+            <button mat-menu-item color="primary" [routerLink]="['create-ca']">CA Certificate</button>
+            <button mat-menu-item color="primary" [routerLink]="['create-end-entity']">End Entity</button>
           </mat-menu>
         </mat-menu>
       </div>

@@ -13,7 +13,7 @@ import { Certificate } from '../../infrastructure/auth/model/certificate.model';
 })
 export class CaCertificateComponent implements OnInit {
   users: User[] = [];
-  selectedUser!: User;
+  selectedUser: User | null = null;;
   userId: number | undefined;
   startDate: Date | null = null;
   endDate: Date | null = null;
@@ -22,7 +22,7 @@ export class CaCertificateComponent implements OnInit {
   issuerCertificateSerialNumber: string | undefined;
   issuerCertificateType:  CertificateType | undefined;
   subjectCertificateType:  CertificateType | undefined;
-  selectedCert!: Certificate;
+  selectedCert: Certificate | null = null;;
   certificates: Certificate[]= [];
 
 
@@ -62,9 +62,9 @@ export class CaCertificateComponent implements OnInit {
 
 
   onCreate(): void {
-    if (this.startDate && this.endDate &&  this.selectedCert.issuerMail && this.filePass) {
-      if(this.selectedCert.certificateType == CertificateType.ROOT){
-      this.userService.createCACertificate(this.selectedCert.issuerMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
+    if (this.startDate && this.endDate &&  this.selectedCert!.issuerMail && this.filePass && this.selectedUser!.mail) {
+      if(this.selectedCert!.certificateType == CertificateType.ROOT){
+      this.userService.createCACertificate(this.selectedCert!.issuerMail, this.selectedUser!.mail, this.selectedCert!.serialNumber,  this.selectedCert!.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
         .subscribe(
           () => {
             alert("CA certificate created successfully!");
@@ -73,7 +73,7 @@ export class CaCertificateComponent implements OnInit {
             alert("Something went wrong while creating your ca certificate. Please try again later.");
           }
         );} else {
-          this.userService.createCACertificate(this.selectedCert.subjectMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
+          this.userService.createCACertificate(this.selectedCert!.subjectMail, this.selectedUser!.mail, this.selectedCert!.serialNumber,  this.selectedCert!.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
           .subscribe(
             () => {
               // Alert user about successful certificate creation
@@ -83,6 +83,8 @@ export class CaCertificateComponent implements OnInit {
               this.userService.getRootAndCA().subscribe(
                 (certificates: Certificate[]) => {
                   this.certificates = certificates;
+                  this.selectedCert = null;
+                  this.selectedUser = null;
                 },
                 (error: any) => {
                   console.error('Error fetching certificates:', error);

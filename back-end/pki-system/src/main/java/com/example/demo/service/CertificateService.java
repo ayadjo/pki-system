@@ -120,8 +120,10 @@ public class CertificateService {
         String filePass = keyStoreAccess.getFilePass();
         KeyStore keyStore = keyStoreReader.getKeyStore(fileName, filePass);
         try {
+            //dohvati lanac sertifikata na osnovu aliasa izdavačkog sertifikata
             Certificate[] chain = keyStore.getCertificateChain(issuerAlias);
             List<Certificate> newChainList = new ArrayList<>(Arrays.asList(chain));
+            //sertifikat subjekta se dodaje na početak lanca sertifikata
             newChainList.add(0, subjectCertificate);
             return newChainList.toArray(new Certificate[0]);
         } catch (KeyStoreException e) {

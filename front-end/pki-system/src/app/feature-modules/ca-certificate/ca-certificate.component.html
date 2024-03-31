@@ -42,7 +42,8 @@
           <tbody>
               <tr *ngFor="let user of users" 
                   (click)="onUserSelect(user)" 
-                  [class.selected]="user === selectedUser">
+                  [class.selected]="user === selectedUser"
+                  [class.duplicate]="user.mail === selectedCert?.issuerMail || user.mail === selectedCert?.subjectMail">
                   <td>{{ user.commonName }}</td> 
                   <td>{{ user.mail }}</td>
                   <td>{{ user.organizationUnit }}</td>                  

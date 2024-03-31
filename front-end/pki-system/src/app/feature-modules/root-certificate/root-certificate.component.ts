@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { UserService } from '../user.service';
+import { User } from '../../infrastructure/auth/model/user.model';
 
 @Component({
   selector: 'app-root-certificate',
@@ -14,7 +15,8 @@ export class RootCertificateComponent {
   userId!: number;
   userMail: string | undefined;
   filePass: string | undefined;
-
+  users: User[] = [];
+  selectedUser!: User;
   constructor(private userService: UserService, 
               private authService: AuthService, 
               private router: Router) {}
@@ -29,11 +31,22 @@ export class RootCertificateComponent {
         }
       });
     }
+
+    this.userService.getAllUsers()
+    .subscribe(
+      (users: User[]) => {
+        // Filter out the currently logged-in user
+        this.users = users.filter(user => user.id !== this.userId);
+      },
+      (error: any) => {
+        console.error('Error fetching users:', error);
+      }
+    );
   }
 
   onCreate(): void {
-    if (this.startDate && this.endDate &&  this.userMail && this.filePass) {
-      this.userService.createRootCertificate(this.startDate, this.endDate, this.userMail, this.filePass)
+    if (this.startDate && this.endDate &&  this.selectedUser.mail && this.filePass) {
+      this.userService.createRootCertificate(this.startDate, this.endDate, this.selectedUser.mail, this.filePass)
         .subscribe(
           () => {
             alert("Root certificate created successfully!");
@@ -47,5 +60,9 @@ export class RootCertificateComponent {
       alert("Missing required data: startDate, endDate, userId or filePass.");
     }
   }
+
+  onUserSelect(user: User): void {
+    this.selectedUser = user;
+}
   
 }

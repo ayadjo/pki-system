@@ -13,4 +13,3 @@ export enum CertificateType {
     CA = 'CA',
     EE = 'EE'
   }
-  

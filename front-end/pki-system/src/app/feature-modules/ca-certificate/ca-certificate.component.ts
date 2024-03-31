@@ -39,16 +39,21 @@ export class CaCertificateComponent implements OnInit {
       }
     })
 
+
+    //dobavljanje usera za donju tabelu
     this.userService.getAllUsers()
     .subscribe(
       (users: User[]) => {
-        // Filter out the currently logged-in user
+        // Da se ne prikazuje mejl od admina
         this.users = users.filter(user => user.id !== this.userId);
+        
       },
       (error: any) => {
         console.error('Error fetching users:', error);
       }
     );
+
+    //dobavljanje sertifikata za gornju tabelu
     this.userService.getRootAndCA()
     .subscribe(
       (certificates: Certificate[]) => {
@@ -58,9 +63,37 @@ export class CaCertificateComponent implements OnInit {
         console.error('Error fetching certificates:', error);
       }
     );
+
+    //filtriranje donje tabele, tako da se onemoguci da CA sertifikat potpise ROOT sertifikatu
+    this.onlyClientsWithoutRootCert();
+   
   }
 
 
+  onlyClientsWithoutRootCert(): void {
+    this.userService.getRootAndCA().subscribe(
+      (certificates: Certificate[]) => {
+        // Filter out certificates with type ROOT
+        const rootCertificates = certificates.filter(cert => cert.certificateType === CertificateType.ROOT);
+        
+        // Extract all issuerMails from filtered rootCertificates
+        const issuerMails = rootCertificates.map(cert => cert.issuerMail);
+
+        // Now get all users except the current one, who are not associated with issuers from rootCertificates
+        this.userService.getAllUsers().subscribe(
+          (users: User[]) => {
+            this.users = users.filter(user => user.id !== this.userId && !issuerMails.includes(user.mail));
+          },
+          (error: any) => {
+            console.error('Error fetching users:', error);
+          }
+        );
+      },
+      (error: any) => {
+        console.error('Error fetching certificates:', error);
+      }
+    );
+  }
   onCreate(): void {
     if (this.startDate && this.endDate &&  this.selectedCert!.issuerMail && this.filePass && this.selectedUser!.mail) {
       if(this.selectedCert!.certificateType == CertificateType.ROOT){

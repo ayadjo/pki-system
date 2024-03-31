@@ -13,13 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -47,6 +46,7 @@ public class CertificateService {
         }
 
         KeyPair keyPair = certificateGeneratorService.generateKeyPair();
+        //proveri da li treba key pair ili public key
         SubjectData subjectData = certificateGeneratorService.generateSubjectData(keyPair, issuer, root.getStartDate(), root.getEndDate());
         IssuerData issuerData = certificateGeneratorService.generateIssuerData(keyPair.getPrivate(), issuer);
         X509Certificate certificate = certificateGeneratorService.generateCertificate(subjectData, issuerData);
@@ -94,12 +94,14 @@ public class CertificateService {
 
         createCertificateEntry(certificate, CertificateType.CA, issuer, subject, cert.getStartDate(), cert.getEndDate());
 
+        Certificate[] certificateChain=createChain(cert.getIssuerCertificateSerialNumber(),cert.getIssuerCertificateSerialNumber()+cert.getIssuerMail(),certificate);
+
         String fileName = certificate.getSerialNumber().toString() + ".jks";
         String filePass = hashPassword(pass);
 
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
         keyStoreWriter.loadKeyStore(null, filePass.toCharArray());
-        keyStoreWriter.write(certificate.getSerialNumber().toString() + subject.getMail(), subjectKeyPair.getPrivate(), filePass.toCharArray(), new Certificate[]{certificate});
+        keyStoreWriter.write(certificate.getSerialNumber().toString() + subject.getMail(), subjectKeyPair.getPrivate(), filePass.toCharArray(), certificateChain);
         keyStoreWriter.saveKeyStore(fileName, filePass.toCharArray());
 
         KeyStoreAccess keyStoreAccess1 = new KeyStoreAccess();
@@ -107,7 +109,27 @@ public class CertificateService {
         keyStoreAccess1.setFilePass(filePass);
         keyStoreAccessRepository.save(keyStoreAccess1);
     }
+    private Certificate[] createChain(String issuerCertificateSerialNumber, String issuerAlias, Certificate subjectCertificate){
+        KeyStoreReader keyStoreReader=new KeyStoreReader();
+        String fileName = issuerCertificateSerialNumber + ".jks";
+        KeyStoreAccess keyStoreAccess = keyStoreAccessRepository.findByFileName(fileName);
+        if (keyStoreAccess == null) {
+            throw new IllegalArgumentException("KeyStoreAccess not found for file name: " + fileName);
+        }
 
+        String filePass = keyStoreAccess.getFilePass();
+        KeyStore keyStore = keyStoreReader.getKeyStore(fileName, filePass);
+        try {
+            Certificate[] chain = keyStore.getCertificateChain(issuerAlias);
+            List<Certificate> newChainList = new ArrayList<>(Arrays.asList(chain));
+            newChainList.add(0, subjectCertificate);
+            return newChainList.toArray(new Certificate[0]);
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
     private void createCertificateEntry(X509Certificate certificate, CertificateType certificateType, User issuer, User subject, Date startDate, Date endDate) {
         CertificateData newCert = new CertificateData();
         newCert.setSerialNumber(certificate.getSerialNumber().toString());

@@ -4,14 +4,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
+import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class KeyStoreWriter {
     //KeyStore je Java klasa za citanje specijalizovanih datoteka koje se koriste za cuvanje kljuceva
@@ -74,4 +74,23 @@ public class KeyStoreWriter {
             e.printStackTrace();
         }
     }
+
+    public void setCertificateChain(String alias, Certificate[] certificateChain, Certificate subjectCertificate) {
+        try {
+            List<Certificate> newChainList = new ArrayList<>(Arrays.asList(certificateChain));
+            newChainList.add(0, subjectCertificate);
+            Collections.reverse(newChainList);
+
+            for (int i = 0; i < newChainList.size() - 1; i++) {
+                keyStore.setCertificateEntry(alias + "_" + i, newChainList.get(i));
+            }
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 }

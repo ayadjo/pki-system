@@ -132,6 +132,45 @@ public class CertificateService {
         return null;
 
     }
+
+    public void createEECertificate(CertificateDto cert, String pass){
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+
+        KeyStoreAccess keyStoreAccess = keyStoreAccessRepository.findByFileName(cert.getIssuerCertificateSerialNumber() + ".jks");
+        if (keyStoreAccess == null) {
+            throw new IllegalArgumentException("KeyStoreAccess not found for file name: " + cert.getIssuerCertificateSerialNumber() + ".jks");
+        }
+        User issuer = userService.getByUsername(cert.getIssuerMail());
+        if (issuer == null) {
+            throw new IllegalArgumentException("Issuer cannot be null");
+        }
+        User subject = userService.getByUsername(cert.getSubjectMail());
+        KeyPair subjectKeyPair = certificateGeneratorService.generateKeyPair();
+        PrivateKey issuerPrivateKey = keyStoreReader.readPrivateKey(keyStoreAccess.getFileName(), keyStoreAccess.getFilePass(), cert.getIssuerCertificateSerialNumber() + cert.getIssuerMail(), keyStoreAccess.getFilePass());
+
+        SubjectData subjectData = certificateGeneratorService.generateSubjectData(subjectKeyPair, subject, cert.getStartDate(), cert.getEndDate());
+        IssuerData issuerData = certificateGeneratorService.generateIssuerData(issuerPrivateKey, issuer);
+        X509Certificate certificate = certificateGeneratorService.generateCertificate(subjectData, issuerData);
+
+        createCertificateEntry(certificate, CertificateType.EE, issuer, subject, cert.getStartDate(), cert.getEndDate());
+
+        Certificate[] certificateChain=createChain(cert.getIssuerCertificateSerialNumber(),cert.getIssuerCertificateSerialNumber()+cert.getIssuerMail(),certificate);
+
+        String fileName = certificate.getSerialNumber().toString() + ".jks";
+        String filePass = hashPassword(pass);
+
+        KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
+        keyStoreWriter.loadKeyStore(null, filePass.toCharArray());
+        assert certificateChain != null;
+        //za end*entity ne cuvamo private key, pravila novi nacin cuvanja 
+        keyStoreWriter.setCertificateChain(certificate.getSerialNumber().toString() + subject.getMail(), certificateChain, certificate);
+        keyStoreWriter.saveKeyStore(fileName, filePass.toCharArray());
+
+        KeyStoreAccess keyStoreAccess1 = new KeyStoreAccess();
+        keyStoreAccess1.setFileName(fileName);
+        keyStoreAccess1.setFilePass(filePass);
+        keyStoreAccessRepository.save(keyStoreAccess1);
+    }
     private void createCertificateEntry(X509Certificate certificate, CertificateType certificateType, User issuer, User subject, Date startDate, Date endDate) {
         CertificateData newCert = new CertificateData();
         newCert.setSerialNumber(certificate.getSerialNumber().toString());
@@ -155,6 +194,7 @@ public class CertificateService {
         }
         return certificates;
     }
+
 
 
 

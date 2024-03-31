@@ -13,7 +13,7 @@ import { Certificate } from '../../infrastructure/auth/model/certificate.model';
 })
 export class CaCertificateComponent implements OnInit {
   users: User[] = [];
-  selectedUser: User | null = null;;
+  selectedUser!: User ;
   userId: number | undefined;
   startDate: Date | null = null;
   endDate: Date | null = null;
@@ -22,7 +22,7 @@ export class CaCertificateComponent implements OnInit {
   issuerCertificateSerialNumber: string | undefined;
   issuerCertificateType:  CertificateType | undefined;
   subjectCertificateType:  CertificateType | undefined;
-  selectedCert: Certificate | null = null;;
+  selectedCert!: Certificate;
   certificates: Certificate[]= [];
 
 
@@ -95,45 +95,32 @@ export class CaCertificateComponent implements OnInit {
     );
   }
   onCreate(): void {
-    if (this.startDate && this.endDate &&  this.selectedCert!.issuerMail && this.filePass && this.selectedUser!.mail) {
-      if(this.selectedCert!.certificateType == CertificateType.ROOT){
-      this.userService.createCACertificate(this.selectedCert!.issuerMail, this.selectedUser!.mail, this.selectedCert!.serialNumber,  this.selectedCert!.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
+    if (this.startDate && this.endDate &&  this.selectedCert.issuerMail && this.filePass && this.selectedUser.mail) {
+      this.userService.createCACertificate(this.selectedCert.issuerMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
         .subscribe(
           () => {
             alert("CA certificate created successfully!");
+            this.userService.getRootAndCA().subscribe(
+              (certificates: Certificate[]) => {
+                this.certificates = certificates;
+              },
+              (error: any) => {
+                console.error('Error fetching certificates:', error);
+              }
+            );
           },
           (error: any) => {
             alert("Something went wrong while creating your ca certificate. Please try again later.");
           }
-        );} else {
-          this.userService.createCACertificate(this.selectedCert!.subjectMail, this.selectedUser!.mail, this.selectedCert!.serialNumber,  this.selectedCert!.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
-          .subscribe(
-            () => {
-              // Alert user about successful certificate creation
-              alert("CA certificate created successfully!");
-      
-              // Fetch updated certificates after successful creation
-              this.userService.getRootAndCA().subscribe(
-                (certificates: Certificate[]) => {
-                  this.certificates = certificates;
-                  this.selectedCert = null;
-                  this.selectedUser = null;
-                },
-                (error: any) => {
-                  console.error('Error fetching certificates:', error);
-                }
-              );
-            },
+        );
+            }
             (error: any) => {
             alert("Something went wrong while creating your ca certificate. Please try again later.");
           }
-        );
-        }
-    } else {
-      console.error('Missing required data: startDate, endDate, userId or filePass');
-      alert("Missing required data: startDate, endDate, userId or filePass.");
-    }
-  }
+        
+        
+    } 
+  
 
 
   onUserSelect(user: User): void {

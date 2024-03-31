@@ -34,6 +34,11 @@ public class CertificateController {
         certificateService.createCACertificate(dto, filePass);
     }
 
+    @PostMapping("/ee-certificate/{filePass}")
+    public void addEECertificate(@RequestBody CertificateDto dto, @PathVariable String filePass){
+        certificateService.createEECertificate(dto, filePass);
+    }
+
 
     @GetMapping(value = "/rootAndCA")
     public ResponseEntity<List<CertificateData>> getRootAndCACertificates() {

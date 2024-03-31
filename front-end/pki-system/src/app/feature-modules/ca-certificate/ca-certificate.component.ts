@@ -87,7 +87,7 @@ export class CaCertificateComponent implements OnInit {
 
   onCreate(): void {
     if (this.startDate && this.endDate &&  this.selectedCert.issuerMail && this.filePass && this.selectedUser.mail) {
-      this.userService.createCACertificate(this.selectedCert.issuerMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
+      this.userService.createCACertificate(this.selectedCert.subjectMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
         .subscribe(
           () => {
             alert("CA certificate created successfully!");

@@ -1,33 +1,6 @@
 <div class="container">
   <h1 class="title">Create CA certificate</h1>
 <br>
-  <h2 class="titlec">Certificates</h2>
-  <div>
-    <table>
-        <thead>
-            <tr>
-                <th>certificateType</th>
-                <th>issuerMail</th>
-                <th>subjectMail</th>
-                <th>startDate</th>
-                <th>endDate</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let cert of certificates" 
-                (click)="onCertSelect(cert)" 
-                [class.selected]="cert === selectedCert">
-                <td>{{ cert.certificateType }}</td>
-                <td>{{ cert.issuerMail }}</td>
-                <td>{{ cert.subjectMail }}</td>                   
-                <td>{{ cert.startDate | date: 'mediumDate' }}</td>
-                <td>{{ cert.endDate | date: 'mediumDate' }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<br>
-<br>
 <h2 class="titlec">Clients</h2>
   <div>
       <table>
@@ -57,11 +30,45 @@
       <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate"><br><br>
       <label class="endDateLabel">End Date</label>
       <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate"><br><br>
-  </div>  
-  <br>
-  <div class="filePass-container">
-      <label class="filePass">File password</label>
-      <input type="password" id="filePass" name="filePass" class="filePass" [(ngModel)]="filePass">
-  </div>
-  <button class="create" (click)="onCreate()">Create</button>
+  </div> 
+    <button [disabled]="!selectedUser" class="choose" (click)="chooseCertificate()">Select certificate</button>
+    <br>
+
+  <div *ngIf="certiciateButtonSelected">
+  <div >
+    <table>
+        <thead>
+            <tr>
+                <th>certificateType</th>
+                <th>issuerMail</th>
+                <th>subjectMail</th>
+                <th>startDate</th>
+                <th>endDate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cert of certificates" 
+                (click)="onCertSelect(cert)" 
+                [class.selected]="cert === selectedCert">
+                <td>{{ cert.certificateType }}</td>
+                <td>{{ cert.issuerMail }}</td>
+                <td>{{ cert.subjectMail }}</td>                   
+                <td>{{ cert.startDate | date: 'mediumDate' }}</td>
+                <td>{{ cert.endDate | date: 'mediumDate' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<br>
+<br>
+<div class="filePass-container">
+    <label class="filePass">File password</label>
+    <input type="password" id="filePass" name="filePass" class="filePassfield" [(ngModel)]="filePass">
+</div>
+  
+<br>
+
+  <button class="create" (click)="onCreate()"  [disabled]="!selectedCert">Create</button>
+</div>
 </div>

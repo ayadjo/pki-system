@@ -24,48 +24,37 @@ export class EndEntityCertificateComponent implements OnInit{
   subjectCertificateType:  CertificateType | undefined;
   selectedCert!: Certificate;
   certificates: Certificate[]= [];
-  
+  certiciateButtonSelected: Boolean;
+
   constructor(private route: ActivatedRoute, 
     private userService: UserService, 
     private authService: AuthService, 
-    private router: Router) {}
+    private router: Router) {this.certiciateButtonSelected = false;}
 
   ngOnInit(): void{
     this.authService.user$.subscribe(user => {
       if (user.id != 0) {
-       this.userId = user.id;   
-       this.subjectCertificateType = CertificateType.EE;
+        this.userId = user.id;   
+        this.subjectCertificateType = CertificateType.EE;
       }
     })
 
 
-    //dobavljanje usera za donju tabelu
+    //dobavljanje usera za gornju tabelu
     this.userService.getAllUsers()
     .subscribe(
       (users: User[]) => {
         // Da se ne prikazuje mejl od admina
         this.users = users.filter(user => user.id !== this.userId);
-        
       },
       (error: any) => {
         console.error('Error fetching users:', error);
       }
     );
 
-    //dobavljanje sertifikata za gornju tabelu
-    this.userService.getAllCertificates()
-    .subscribe(
-      (certificates: Certificate[]) => {
-        this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);
-      },
-      (error: any) => {
-        console.error('Error fetching certificates:', error);
-      }
-    );
-
-    //filtriranje donje tabele, tako da se onemoguci da CA sertifikat potpise ROOT sertifikatu
-    this.onlyClientsWithoutRootCert();
-   
+    //filtriranje gornje tabele
+    //this.onlyClientsWithoutRootCert();
+    
   }
 
 
@@ -118,21 +107,32 @@ export class EndEntityCertificateComponent implements OnInit{
             alert("Something went wrong while creating your ca certificate. Please try again later.");
           }
         
-        
     } 
   
-
+  chooseCertificate():void {
+    //dobavljanje sertifikata za donju tabelu
+        this.certiciateButtonSelected = true;
+        this.userService.getAllCertificates()
+        .subscribe(
+          (certificates: Certificate[]) => {
+          this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);
+          },
+          (error: any) => {
+            console.error('Error fetching certificates:', error);
+          }
+     );
+    }
 
 
 
 
   onUserSelect(user: User): void {
     this.selectedUser = user;
-}
+  }
 
   onCertSelect(certificate: Certificate): void {
   this.selectedCert = certificate;
-}
+  }
 
 
 }

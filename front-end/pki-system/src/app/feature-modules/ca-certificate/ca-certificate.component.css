@@ -25,7 +25,12 @@
 .endDateLabel {
     margin-top: 30px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 18px;
+    font-size: 14px;
+}
+.filePassfield{
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .startDate,
@@ -54,8 +59,20 @@
     padding: 10px 20px; 
     cursor: pointer;
     padding: 15px 30px; 
-    margin-right: 10px;
+    margin-left:195px;
     width: 20%;
+    margin-top: 30px;
+  }
+
+  .choose{
+    background-color: rgb(178, 140, 69); 
+    border: none;
+    border-radius: 20px; 
+    color: white; 
+    padding: 10px 20px; 
+    cursor: pointer;
+    padding: 15px 30px; 
+    margin-right: 10px;
     margin-top: 30px;
   }
   
@@ -95,12 +112,13 @@
     flex-direction: row;
     align-items: center;
     margin-top: 10px;
+    margin-left: 100px;
 }
 
 .filePass {
     margin-right: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .selected {
@@ -112,3 +130,11 @@
 }
 
 
+.choose[disabled] {
+  background-color: #999; /* Postavite boju pozadine na tamniju boju po vašem izboru */
+  color: #fff; /* Postavite boju teksta na belu ili neku drugu kontrastnu boju */
+}
+.create[disabled] {
+  background-color: #999; /* Postavite boju pozadine na tamniju boju po vašem izboru */
+  color: #fff; /* Postavite boju teksta na belu ili neku drugu kontrastnu boju */
+}

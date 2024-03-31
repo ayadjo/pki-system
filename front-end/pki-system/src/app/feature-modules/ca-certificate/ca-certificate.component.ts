@@ -24,12 +24,13 @@ export class CaCertificateComponent implements OnInit {
   subjectCertificateType:  CertificateType | undefined;
   selectedCert!: Certificate;
   certificates: Certificate[]= [];
-
+  certiciateButtonSelected: Boolean;
 
   constructor(private route: ActivatedRoute, 
     private userService: UserService, 
     private authService: AuthService, 
-    private router: Router) {}
+    private router: Router
+    ) { this.certiciateButtonSelected = false;}
 
   ngOnInit(): void{
     this.authService.user$.subscribe(user => {
@@ -40,11 +41,11 @@ export class CaCertificateComponent implements OnInit {
     })
 
 
-    //dobavljanje usera za donju tabelu
+    //dobavljanje usera za gornju tabelu
     this.userService.getAllUsers()
     .subscribe(
       (users: User[]) => {
-        // Da se ne prikazuje mejl od admina
+        // Da se ne prikazuje red od admina
         this.users = users.filter(user => user.id !== this.userId);
         
       },
@@ -53,19 +54,8 @@ export class CaCertificateComponent implements OnInit {
       }
     );
 
-    //dobavljanje sertifikata za gornju tabelu
-    this.userService.getRootAndCA()
-    .subscribe(
-      (certificates: Certificate[]) => {
-        this.certificates = certificates;
-      },
-      (error: any) => {
-        console.error('Error fetching certificates:', error);
-      }
-    );
-
-    //filtriranje donje tabele, tako da se onemoguci da CA sertifikat potpise ROOT sertifikatu
-    this.onlyClientsWithoutRootCert();
+    //filtriranje  tabele, tako da se onemoguci da CA sertifikat potpise ROOT sertifikatu
+    //this.onlyClientsWithoutRootCert();
    
   }
 
@@ -94,6 +84,7 @@ export class CaCertificateComponent implements OnInit {
       }
     );
   }
+
   onCreate(): void {
     if (this.startDate && this.endDate &&  this.selectedCert.issuerMail && this.filePass && this.selectedUser.mail) {
       this.userService.createCACertificate(this.selectedCert.issuerMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
@@ -113,23 +104,33 @@ export class CaCertificateComponent implements OnInit {
             alert("Something went wrong while creating your ca certificate. Please try again later.");
           }
         );
-            }
-            (error: any) => {
-            alert("Something went wrong while creating your ca certificate. Please try again later.");
-          }
-        
-        
-    } 
+        }
+        (error: any) => {
+        alert("Something went wrong while creating your ca certificate. Please try again later.");
+      }   
+  } 
   
-
+  chooseCertificate():void {
+ //dobavljanje sertifikata za donju tabelu
+    this.certiciateButtonSelected = true;
+    this.userService.getRootAndCA()
+    .subscribe(
+      (certificates: Certificate[]) => {
+        this.certificates = certificates;
+      },
+      (error: any) => {
+        console.error('Error fetching certificates:', error);
+      }
+ );
+  }
 
   onUserSelect(user: User): void {
-    this.selectedUser = user;
-}
+      this.selectedUser = user;
+  }
 
   onCertSelect(certificate: Certificate): void {
-  this.selectedCert = certificate;
-}
+    this.selectedCert = certificate;
+  }
 
 
 }

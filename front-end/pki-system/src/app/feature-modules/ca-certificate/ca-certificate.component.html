@@ -15,8 +15,7 @@
           <tbody>
               <tr *ngFor="let user of users" 
                   (click)="onUserSelect(user)" 
-                  [class.selected]="user === selectedUser"
-                  [class.duplicate]="user.mail === selectedCert?.issuerMail || user.mail === selectedCert?.subjectMail">
+                  [class.selected]="user === selectedUser">
                   <td>{{ user.commonName }}</td> 
                   <td>{{ user.mail }}</td>
                   <td>{{ user.organizationUnit }}</td>                  
@@ -49,7 +48,8 @@
         <tbody>
             <tr *ngFor="let cert of certificates" 
                 (click)="onCertSelect(cert)" 
-                [class.selected]="cert === selectedCert">
+                [class.selected]="cert === selectedCert"
+                [class.duplicate]="cert.issuerMail === selectedUser.mail || cert.subjectMail === selectedUser.mail ">
                 <td>{{ cert.certificateType }}</td>
                 <td>{{ cert.issuerMail }}</td>
                 <td>{{ cert.subjectMail }}</td>                   

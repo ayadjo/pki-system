@@ -139,6 +139,12 @@
     background-color: #999; /* Postavite boju pozadine na tamniju boju po vašem izboru */
     color: #fff; /* Postavite boju teksta na belu ili neku drugu kontrastnu boju */
 }
+.duplicate {
+    background-color:salmon;
+    pointer-events: none;
+  }
+  
+  
 .choose{
     background-color: rgb(178, 140, 69); 
     border: none;

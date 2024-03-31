@@ -1,7 +1,7 @@
 <div class="container">
   <h1 class="title">Create CA certificate</h1>
 <br>
-  <h2 class="title">Choose certificate</h2>
+  <h2 class="titlec">Certificates</h2>
   <div>
     <table>
         <thead>
@@ -11,7 +11,6 @@
                 <th>subjectMail</th>
                 <th>startDate</th>
                 <th>endDate</th>
-                <th>Serial number</th>
             </tr>
         </thead>
         <tbody>
@@ -21,33 +20,32 @@
                 <td>{{ cert.certificateType }}</td>
                 <td>{{ cert.issuerMail }}</td>
                 <td>{{ cert.subjectMail }}</td>                   
-                <td>{{ cert.startDate }}</td>
-                <td>{{ cert.endDate }}</td>
-                <td>{{ cert.serialNumber }}</td>
+                <td>{{ cert.startDate | date: 'mediumDate' }}</td>
+                <td>{{ cert.endDate | date: 'mediumDate' }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 <br>
-<h2 class="title">Choose client</h2>
 <br>
+<h2 class="titlec">Clients</h2>
   <div>
       <table>
-          <thead>
-              <tr>
-                  <th>Mail</th>
-                  <th>Organization unit</th>
-                  <th>Name</th>
-                  <th>Country</th>
-              </tr>
-          </thead>
+        <thead>
+            <tr>
+                <th>Full name</th>
+                <th>Mail</th>
+                <th>Organization unit</th>
+                <th>Country</th>
+            </tr>
+        </thead>
           <tbody>
               <tr *ngFor="let user of users" 
                   (click)="onUserSelect(user)" 
                   [class.selected]="user === selectedUser">
+                  <td>{{ user.commonName }}</td> 
                   <td>{{ user.mail }}</td>
-                  <td>{{ user.organizationUnit }}</td>
-                  <td>{{ user.commonName }}</td>                   
+                  <td>{{ user.organizationUnit }}</td>                  
                   <td>{{ user.country }}</td>
               </tr>
           </tbody>

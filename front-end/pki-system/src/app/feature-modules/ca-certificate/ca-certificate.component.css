@@ -65,6 +65,10 @@
     border: 2px solid rgb(35, 35, 53);
   }
 
+  .titlec {
+    color: rgb(178, 140, 69);
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -102,3 +106,5 @@
 .selected {
   background-color: lightblue; /* Change to your desired background color */
 }
+
+

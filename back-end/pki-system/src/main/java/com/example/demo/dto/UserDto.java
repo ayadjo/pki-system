@@ -10,14 +10,14 @@ public class UserDto {
 
     Long id;
     private String mail;
-    private String name;
+    private String commonName;
     private String country;
     private String organizationUnit;
 
     public UserDto(User user) {
         id = user.getId();
         mail = user.getMail();
-        name = user.getCommonName();
+        commonName = user.getCommonName();
         country = user.getCountry();
         organizationUnit = user.getOrganizationUnit();
 

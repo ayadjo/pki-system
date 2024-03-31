@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../../infrastructure/auth/model/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user.service';
@@ -11,7 +11,7 @@ import { Certificate } from '../../infrastructure/auth/model/certificate.model';
   templateUrl: './ca-certificate.component.html',
   styleUrl: './ca-certificate.component.css'
 })
-export class CaCertificateComponent {
+export class CaCertificateComponent implements OnInit {
   users: User[] = [];
   selectedUser!: User;
   userId: number | undefined;
@@ -42,13 +42,13 @@ export class CaCertificateComponent {
     this.userService.getAllUsers()
     .subscribe(
       (users: User[]) => {
-        this.users = users;
+        // Filter out the currently logged-in user
+        this.users = users.filter(user => user.id !== this.userId);
       },
       (error: any) => {
         console.error('Error fetching users:', error);
       }
     );
-
     this.userService.getRootAndCA()
     .subscribe(
       (certificates: Certificate[]) => {
@@ -74,11 +74,22 @@ export class CaCertificateComponent {
           }
         );} else {
           this.userService.createCACertificate(this.selectedCert.subjectMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
-        .subscribe(
-          () => {
-            alert("CA certificate created successfully!");
-          },
-          (error: any) => {
+          .subscribe(
+            () => {
+              // Alert user about successful certificate creation
+              alert("CA certificate created successfully!");
+      
+              // Fetch updated certificates after successful creation
+              this.userService.getRootAndCA().subscribe(
+                (certificates: Certificate[]) => {
+                  this.certificates = certificates;
+                },
+                (error: any) => {
+                  console.error('Error fetching certificates:', error);
+                }
+              );
+            },
+            (error: any) => {
             alert("Something went wrong while creating your ca certificate. Please try again later.");
           }
         );

@@ -1,2 +1,39 @@
 <div class="container">
+    <div class="title-section">
+        <h1 class="title">Certificates</h1>
+    </div>
+    <div class="table-container">
+        <table class="table">
+                <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Type</th>
+                        <th>Issuer Mail</th>
+                        <th>Subject Mail</th>
+                        <th>Not Before</th>
+                        <th>Not After</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let certificate of certificates">
+                        <td>{{ certificate.serialNumber }}</td>
+                        <td>{{ certificate.certificateType }}</td>
+                        <td>{{ certificate.issuerMail }}</td>
+                        <td>{{ certificate.subjectMail }}</td>
+                        <td>{{ certificate.startDate | date: 'mediumDate'}}</td>
+                        <td>{{ certificate.endDate | date: 'mediumDate' }}</td>
+                        <td>
+                            <button (click)="onRevokeClicked(certificate)">Revoke</button>
+                            
+                        </td>
+                        <td>
+                            <button class="see-more-button" (click)="onSeeMoreClicked(certificate)">...</button>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
 </div>
+

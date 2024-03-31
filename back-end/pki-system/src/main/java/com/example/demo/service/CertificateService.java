@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.KeyStoreDto;
 import com.example.demo.dto.RootCertificateDto;
+import com.example.demo.dto.ViewCerificateDto;
+import com.example.demo.keystores.KeyStoreReader;
 import com.example.demo.keystores.KeyStoreWriter;
 import com.example.demo.model.*;
 import com.example.demo.model.enumerations.CertificateType;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.security.KeyPair;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.util.List;
 
 
 @Service
@@ -29,7 +34,7 @@ public class CertificateService {
 
     @Autowired
     private CertificateRepository certificateRepository;
-    public void createRootCertificate(RootCertificateDto root, String pass) {
+    public void createRootCertificate(RootCertificateDto root, String pass){
         if (root == null || pass == null) {
             // Ovde možete dodati odgovarajući tretman za null vrednosti
             return;
@@ -75,6 +80,26 @@ public class CertificateService {
     private String hashPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
+    }
+
+    public List<CertificateData> getAll() {
+        return certificateRepository.findAll();
+    }
+
+    public ViewCerificateDto getCertificate(KeyStoreDto keyStoreDto) {
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+
+        KeyStoreAccess keyStore = keyStoreAccessRepository.findByFileName(keyStoreDto.getFileName());
+        String alias = keyStoreDto.getAlias();
+        if (keyStore == null) {
+            throw new IllegalArgumentException("KeyStoreAccess not found for file name: " + keyStoreDto.getFileName());
+        }
+
+        X509Certificate certificate =(X509Certificate) keyStoreReader.readCertificate(keyStore.getFileName(), keyStore.getFilePass(), alias);
+        CertificateData certificateData = certificateRepository.getById(certificate.getSerialNumber().toString());
+        ViewCerificateDto certificateDto = new ViewCerificateDto(certificate, certificateData.getCertificateType(), certificateData.getRevoked());
+
+        return certificateDto;
     }
 
 }

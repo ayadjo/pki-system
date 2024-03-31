@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../infrastructure/auth/model/user.model';
 import { Observable } from 'rxjs';
+import { Certificate } from '../infrastructure/auth/model/certificate.model';
+import { KeyStoreDto } from '../infrastructure/auth/model/keyStoreDto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +35,12 @@ export class UserService {
     const requestBody = { startDate, endDate, issuerMail };
     return this.http.post<any>(`http://localhost:8080/certificates/root-certificate/${filePass}`, requestBody);
   }
+
+  getAllCertificates(): Observable<Certificate[]> {
+    return this.http.get<Certificate[]>('http://localhost:8080/certificates/all');
+  }
+
+  
+  
   
 }

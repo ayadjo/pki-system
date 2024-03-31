@@ -11,8 +11,16 @@ import javax.persistence.Id;
 public class KeyStoreAccess {
 
     @Id
-    String fileName;
+    public String fileName;
 
-    String filePass;
+    public String filePass;
 
+    public KeyStoreAccess(String fileName, String filePass) {
+        this.fileName = fileName;
+        this.filePass = filePass;
+    }
+
+    public KeyStoreAccess() {
+
+    }
 }

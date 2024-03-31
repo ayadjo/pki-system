@@ -1,3 +1,93 @@
 .container{
     min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1vw;
+    font-weight: 350;
+}
+
+.title-section {
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title {
+    color:  rgb(35, 35, 53);
+    margin-bottom: 30px;
+    margin-top: 50px;
+    font-size: 2.1vw;
+    font-weight: 350;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.table-container {
+    margin-top: 30px;     
+    padding-bottom: 40px;
+    margin: 0 auto;
+    width: 80%;
+
+}
+
+.table {
+    margin-top: 20px; 
+    margin-bottom: 140px;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid white; 
+    color:   rgb(35, 35, 53);
+    font-size: 1.1vw;
+    font-weight: 350;
+}
+
+.table th, .table td {
+    padding: 10px;
+    text-align: center; 
+    font-size: 1.1vw;
+    font-weight: 350;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.table th {
+    color: white;
+    background:  rgb(35, 35, 53);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.table td {
+    font-size: 1.0vw;
+    font-weight: 350;
+    color: black;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.table button {
+    font-size: 1.0vw;
+    font-weight: 350;
+    font-family: 'Montserrat', sans-serif;
+    background:  rgb(178, 140, 69);
+    color: white; 
+    display: block;
+    margin: 0 auto;
+    padding: 8px 16px; 
+    border: none; 
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.table .see-more-button {
+    font-size: 1.0vw;
+    font-weight: 350;
+    font-family: 'Montserrat', sans-serif;
+    background:  rgb(35, 35, 53);
+    color: white; 
+    display: block;
+    margin: 0 auto;
+    padding: 8px 16px; 
+    border: none; 
+    cursor: pointer;
+    border-radius: 5px;
 }

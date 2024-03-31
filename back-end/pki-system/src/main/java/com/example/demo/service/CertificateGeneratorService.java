@@ -19,6 +19,8 @@ import java.security.*;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -70,7 +72,6 @@ public class CertificateGeneratorService {
         builder.addRDN(BCStyle.OU, issuer.getOrganizationUnit());
         builder.addRDN(BCStyle.C, issuer.getCountry());
         builder.addRDN(BCStyle.E, issuer.getMail());
-
         builder.addRDN(BCStyle.UID, issuer.getId().toString());
 
         return new IssuerData(issuerKey, builder.build());
@@ -87,7 +88,6 @@ public class CertificateGeneratorService {
         builder.addRDN(BCStyle.OU, subject.getOrganizationUnit());
         builder.addRDN(BCStyle.C, subject.getCountry());
         builder.addRDN(BCStyle.E, subject.getMail());
-
         builder.addRDN(BCStyle.UID, subject.getId().toString());
 
         SubjectData subjectData=new SubjectData();

@@ -5,6 +5,7 @@
         <mat-menu #menu="matMenu">
           <button mat-menu-item color="primary" [routerLink]="['']">Home</button>
           <button mat-menu-item color="primary" [matMenuTriggerFor]="certificateMenu">Certificate Generator</button>
+          <button mat-menu-item color="primary" [routerLink]="['certificates-overview']">Certificates</button>
           <mat-menu #certificateMenu="matMenu">
             <button mat-menu-item color="primary" [routerLink]="['create-root']">Root Certificate</button>
             <button mat-menu-item color="primary" [routerLink]="['create-ca']">CA Certificate</button>

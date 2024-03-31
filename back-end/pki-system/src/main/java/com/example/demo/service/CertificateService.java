@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.CertificateDto;
+import com.example.demo.dto.KeyStoreDto;
 import com.example.demo.dto.RootCertificateDto;
+import com.example.demo.dto.ViewCerificateDto;
+import com.example.demo.dto.CertificateDto;
 import com.example.demo.keystores.KeyStoreReader;
 import com.example.demo.keystores.KeyStoreWriter;
 import com.example.demo.model.*;
@@ -18,6 +20,8 @@ import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.util.List;
 import java.util.*;
 
 
@@ -35,7 +39,7 @@ public class CertificateService {
 
     @Autowired
     private CertificateRepository certificateRepository;
-    public void createRootCertificate(RootCertificateDto root, String pass) {
+    public void createRootCertificate(RootCertificateDto root, String pass){
         if (root == null || pass == null) {
             return;
         }
@@ -71,6 +75,26 @@ public class CertificateService {
     private String hashPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
+    }
+
+    public List<CertificateData> getAll() {
+        return certificateRepository.findAll();
+    }
+
+    public ViewCerificateDto getCertificate(KeyStoreDto keyStoreDto) {
+        KeyStoreReader keyStoreReader = new KeyStoreReader();
+
+        KeyStoreAccess keyStore = keyStoreAccessRepository.findByFileName(keyStoreDto.getFileName());
+        String alias = keyStoreDto.getAlias();
+        if (keyStore == null) {
+            throw new IllegalArgumentException("KeyStoreAccess not found for file name: " + keyStoreDto.getFileName());
+        }
+
+        X509Certificate certificate =(X509Certificate) keyStoreReader.readCertificate(keyStore.getFileName(), keyStore.getFilePass(), alias);
+        CertificateData certificateData = certificateRepository.getById(certificate.getSerialNumber().toString());
+        ViewCerificateDto certificateDto = new ViewCerificateDto(certificate, certificateData.getCertificateType(), certificateData.getRevoked());
+
+        return certificateDto;
     }
 
     public void createCACertificate(CertificateDto cert, String pass){
@@ -198,8 +222,6 @@ public class CertificateService {
     public List<CertificateData> findAll() {
         return certificateRepository.findAll();
     }
-
-
 
 
 }

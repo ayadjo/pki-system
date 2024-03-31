@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KeyStoreAccessRepository extends JpaRepository<KeyStoreAccess, String>  {
-
     KeyStoreAccess findByFileName(String fileName);
 }

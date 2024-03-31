@@ -9,6 +9,7 @@ import { CaCertificateComponent } from './ca-certificate/ca-certificate.componen
 import { RootCertificateComponent } from './root-certificate/root-certificate.component';
 import { EndEntityCertificateComponent } from './end-entity-certificate/end-entity-certificate.component';
 import { CertificatesOverviewComponent } from './certificates-overview/certificates-overview.component';
+import { CertificateFormComponent } from './certificate-form/certificate-form.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { CertificatesOverviewComponent } from './certificates-overview/certifica
     CaCertificateComponent,
     RootCertificateComponent,
     EndEntityCertificateComponent,
-    CertificatesOverviewComponent
+    CertificatesOverviewComponent,
+    CertificateFormComponent
   ],
   imports: [
     CommonModule,

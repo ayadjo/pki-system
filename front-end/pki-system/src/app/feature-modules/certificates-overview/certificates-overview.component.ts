@@ -5,6 +5,7 @@ import { UserService } from '../user.service';
 import { Certificate } from '../../infrastructure/auth/model/certificate.model';
 import { Observable } from 'rxjs';
 import { KeyStoreDto } from '../../infrastructure/auth/model/keyStoreDto.model';
+import { ViewCertificateDto } from '../../infrastructure/auth/model/viewCertificateDto.model';
 
 @Component({
   selector: 'app-certificates-overview',
@@ -14,11 +15,12 @@ import { KeyStoreDto } from '../../infrastructure/auth/model/keyStoreDto.model';
 export class CertificatesOverviewComponent {
   certificates: Certificate[] = [];
   selectedCertificate: Certificate | undefined;
+  certificateDetails!: ViewCertificateDto;
   userId!: number;
   showPasswordInput: boolean = false;
   password: string = '';
   certificate : Certificate | undefined;
-  
+  showCertificate: boolean = false;
 
   constructor(private userService: UserService, 
               private authService: AuthService, 
@@ -58,7 +60,15 @@ export class CertificatesOverviewComponent {
       fileName: this.selectedCertificate.serialNumber + ".jks",
       alias: this.selectedCertificate.serialNumber + this.selectedCertificate.issuerMail,
     };
-    
+    this.userService.getCertificate(keyStoreDto.fileName, keyStoreDto.alias).subscribe({
+      next: (certificateDetails: ViewCertificateDto) => {
+        this.certificateDetails = certificateDetails;
+        this.showCertificate = true;
+      },
+      error: (error: any) => {
+        console.error('Error fetching certificate details:', error);
+      }
+    });
   }
   
   

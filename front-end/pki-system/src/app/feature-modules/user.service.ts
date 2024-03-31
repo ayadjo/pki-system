@@ -4,12 +4,14 @@ import { User } from '../infrastructure/auth/model/user.model';
 import { Observable } from 'rxjs';
 import { Certificate } from '../infrastructure/auth/model/certificate.model';
 import { KeyStoreDto } from '../infrastructure/auth/model/keyStoreDto.model';
+import { ViewCertificateDto } from '../infrastructure/auth/model/viewCertificateDto.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   currentUser!:any;
+  private baseUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
@@ -40,7 +42,10 @@ export class UserService {
     return this.http.get<Certificate[]>('http://localhost:8080/certificates/all');
   }
 
-  
+  getCertificate(fileName: string, alias: string): Observable<ViewCertificateDto> {
+    const url = `${this.baseUrl}/certificates/certificate/${fileName}/${alias}`;
+    return this.http.get<ViewCertificateDto>(url);
+  }
   
   
 }

@@ -8,6 +8,7 @@
     width: 700px;
     margin: 50px auto; /* Centriranje po horizontali, sa 50px margine na vrhu i dnu */
     padding: 20px;
+    min-height: 75vh;
   }
 
 .title {
@@ -107,4 +108,27 @@ input[type="checkbox"] {
 .checkbox {
     border-radius: 10px; /* Veća zaobljenost */
     border: 1px solid #ccc; /* Boja ivice */
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-size: 14px;
+}
+
+td {
+  font-size: 12px;
+}
+.selected {
+  background-color: lightblue; /* Change to your desired background color */
 }

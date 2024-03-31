@@ -1,1 +1,73 @@
-<p>end-entity-certificate works!</p>
+<div class="container">
+    <h1 class="title">Create EE certificate</h1>
+  <br>
+    <h2 class="titlec">Certificates</h2>
+    <div>
+      <table>
+          <thead>
+              <tr>
+                  <th>certificateType</th>
+                  <th>issuerMail</th>
+                  <th>subjectMail</th>
+                  <th>startDate</th>
+                  <th>endDate</th>
+              </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let cert of certificates">
+                <tr (click)="cert.certificateType !== 'EE' && onCertSelect(cert)" 
+                    [class.selected]="cert === selectedCert" 
+                    [class.disabled]="cert.certificateType === 'EE'">
+                    <td>{{ cert.certificateType }}</td>
+                    <td>{{ cert.issuerMail }}</td>
+                    <td>{{ cert.subjectMail }}</td>                   
+                    <td>{{ cert.startDate | date: 'mediumDate' }}</td>
+                    <td>{{ cert.endDate | date: 'mediumDate' }}</td>
+                </tr>
+            </ng-container>
+        </tbody>
+        
+      </table>
+  </div>
+  <br>
+  <br>
+  <h2 class="titlec">Clients</h2>
+    <div>
+        <table>
+          <thead>
+              <tr>
+                  <th>Full name</th>
+                  <th>Mail</th>
+                  <th>Organization unit</th>
+                  <th>Country</th>
+              </tr>
+          </thead>
+            <tbody>
+                <tr *ngFor="let user of users" 
+                    (click)="onUserSelect(user)" 
+                    [class.selected]="user === selectedUser"
+                    [class.duplicate]="user.mail === selectedCert?.issuerMail || user.mail === selectedCert?.subjectMail">
+                    <td>{{ user.commonName }}</td> 
+                    <td>{{ user.mail }}</td>
+                    <td>{{ user.organizationUnit }}</td>                  
+                    <td>{{ user.country }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    
+    <div class="date-picker">
+        <label class="startDateLabel">Start Date</label>
+        <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate"><br><br>
+        <label class="endDateLabel">End Date</label>
+        <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate"><br><br>
+    </div>  
+    <br>
+    <div class="filePass-container">
+        <label class="filePass">File password</label>
+        <input type="password" id="filePass" name="filePass" class="filePass" [(ngModel)]="filePass">
+    </div>
+    <button class="create" (click)="onCreate()">Create</button>
+  </div>
+  

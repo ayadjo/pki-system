@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { UserService } from '../user.service';
+import { User } from '../../infrastructure/auth/model/user.model';
 
 interface KeyUsage {
   DIGITAL_SIGNATURE: boolean;
@@ -42,6 +43,8 @@ export class RootCertificateComponent {
     DECIPHER_ONLY: false,
   };
 
+  users: User[] = [];
+  selectedUser!: User;
   constructor(private userService: UserService, 
               private authService: AuthService, 
               private router: Router) {}
@@ -56,6 +59,17 @@ export class RootCertificateComponent {
         }
       });
     }
+
+    this.userService.getAllUsers()
+    .subscribe(
+      (users: User[]) => {
+        // Filter out the currently logged-in user
+        this.users = users.filter(user => user.id !== this.userId);
+      },
+      (error: any) => {
+        console.error('Error fetching users:', error);
+      }
+    );
   }
 
   onCreate(): void {
@@ -84,5 +98,8 @@ export class RootCertificateComponent {
   }
 
   
+  onUserSelect(user: User): void {
+    this.selectedUser = user;
+}
   
 }

@@ -21,22 +21,7 @@ public class KeyStoreAccess {
         this.filePass = filePass;
     }
 
-    public KeyStoreAccess() {
+    public KeyStoreAccess() {}
 
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFilePass(String filePass) {
-        this.filePass = filePass;
-    }
-
-    public String getFilePass() {
-        return filePass;
-    }
 }

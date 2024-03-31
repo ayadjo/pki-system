@@ -58,7 +58,7 @@ export class CertificatesOverviewComponent {
     this.selectedCertificate = certificate;
     const keyStoreDto: KeyStoreDto = {
       fileName: this.selectedCertificate.serialNumber + ".jks",
-      alias: this.selectedCertificate.serialNumber + this.selectedCertificate.issuerMail,
+      alias: this.selectedCertificate.serialNumber + this.selectedCertificate.subjectMail,
     };
     this.userService.getCertificate(keyStoreDto.fileName, keyStoreDto.alias).subscribe({
       next: (certificateDetails: ViewCertificateDto) => {

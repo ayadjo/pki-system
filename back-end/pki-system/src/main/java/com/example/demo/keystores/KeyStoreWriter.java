@@ -75,20 +75,28 @@ public class KeyStoreWriter {
         }
     }
 
-    public void setCertificateChain(String alias, Certificate[] certificateChain, Certificate subjectCertificate) {
+    public void writeEE(String alias, PrivateKey privateKey, char[] password, Certificate[] certificateChain) {
+        try {
+            keyStore.setKeyEntry(alias, privateKey, password, certificateChain);
+            X509Certificate certificate=(X509Certificate)keyStore.getCertificate("alias");
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*public void setCertificateChain(String alias, Certificate[] certificateChain, Certificate subjectCertificate) {
         try {
             List<Certificate> newChainList = new ArrayList<>(Arrays.asList(certificateChain));
             newChainList.add(0, subjectCertificate);
             Collections.reverse(newChainList);
 
             for (int i = 0; i < newChainList.size() - 1; i++) {
-                keyStore.setCertificateEntry(alias + "_" + i, newChainList.get(i));
+                keyStore.setCertificateEntry(alias, newChainList.get(i));
             }
         } catch (KeyStoreException e) {
             e.printStackTrace();
         }
-    }
-
+    }*/
 
 
 

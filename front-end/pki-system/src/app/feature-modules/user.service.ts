@@ -40,9 +40,6 @@ export class UserService {
     return this.http.post<any>(`http://localhost:8080/certificates/root-certificate/${filePass}`, requestBody);
   }
 
-  getAllCertificates(): Observable<Certificate[]> {
-    return this.http.get<Certificate[]>('http://localhost:8080/certificates/all');
-  }
 
   getCertificate(fileName: string, alias: string): Observable<ViewCertificateDto> {
     const url = `${this.baseUrl}/certificates/certificate/${fileName}/${alias}`;
@@ -69,6 +66,7 @@ export class UserService {
   getAllCertificates(): Observable<Certificate[]> {
     return this.http.get<Certificate[]>('http://localhost:8080/certificates/all');
   }
+
 
   
 }

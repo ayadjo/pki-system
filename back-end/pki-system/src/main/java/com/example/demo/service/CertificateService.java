@@ -18,11 +18,11 @@ import com.example.demo.model.enumerations.KeyUsageExtension;
 import com.example.demo.model.enumerations.ExtendedKey;
 
 
-import java.security.KeyPair;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.PrivateKey;
+import javax.security.auth.x500.X500Principal;
+import java.math.BigInteger;
+import java.security.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +63,10 @@ public class CertificateService {
             throw new IllegalArgumentException("Issuer cannot be null");
         }
 
+        if (root.getStartDate().after(root.getEndDate())) {
+            throw new IllegalArgumentException("Invalid start or end date for certificate");
+        }
+
         Integer[] keyUsages = keyUsageExtensionConverter.convertKeyUsageToInteger(root.getKeyUsageExtension());
         KeyPurposeId[] extendedKeyUsages = extendedKeyConverter.convertToExtendedKey(root.getExtendedKey());
         KeyPair keyPair = certificateGeneratorService.generateKeyPair();
@@ -92,7 +96,7 @@ public class CertificateService {
         return encoder.encode(password);
     }
 
-    public void createCACertificate(CertificateDto cert, String pass){
+    public void createCACertificate(CertificateDto cert, String pass) {
         KeyStoreReader keyStoreReader = new KeyStoreReader();
 
         KeyStoreAccess keyStoreAccess = keyStoreAccessRepository.findByFileName(cert.getIssuerCertificateSerialNumber() + ".jks");
@@ -246,6 +250,22 @@ public class CertificateService {
         return certificateRepository.findAll();
     }
 
+
+    private boolean isValid(X509Certificate x509Certificate, PublicKey issuerPublicKey) {
+        try {
+            x509Certificate.verify(issuerPublicKey); //Verifies that this certificate was signed using the private key that corresponds to the specified public key
+            x509Certificate.checkValidity();   //proverava da li je sertifikat trenutno važeći u odnosu na trenutni datum i vreme
+        } catch (Exception e) {
+            return false; // Sertifikat nije validan
+        }
+
+        return true;
+    }
+    
+
+    private static boolean isRootCertificate(CertificateData certificate) {
+        return certificate.getCertificateType() == CertificateType.ROOT;
+    }
 
 
 

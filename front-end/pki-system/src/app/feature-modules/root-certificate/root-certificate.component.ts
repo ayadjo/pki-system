@@ -73,10 +73,10 @@ export class RootCertificateComponent {
   }
 
   onCreate(): void {
-    if (this.startDate && this.endDate &&  this.userMail && this.filePass) {
+    if (this.startDate && this.endDate &&  this.selectedUser.mail && this.filePass) {
       const keyUsageArray = Object.keys(this.keyUsage).filter(key => this.keyUsage[key as keyof KeyUsage]);
       const extendedKeyArray = Object.keys(this.extendedKeyUsage).filter(key => this.extendedKeyUsage[key]);
-      this.userService.createRootCertificate(this.startDate, this.endDate, this.userMail, this.filePass, keyUsageArray, extendedKeyArray)
+      this.userService.createRootCertificate(this.startDate, this.endDate, this.selectedUser.mail, this.filePass, keyUsageArray, extendedKeyArray)
         .subscribe(
           () => {
             alert("Root certificate created successfully!");

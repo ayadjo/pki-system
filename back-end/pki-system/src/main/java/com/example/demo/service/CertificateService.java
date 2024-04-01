@@ -214,10 +214,9 @@ public class CertificateService {
 
         KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
         keyStoreWriter.loadKeyStore(null, filePass.toCharArray());
-        assert certificateChain != null;
-        //za end*entity ne cuvamo private key, pravila novi nacin cuvanja
         keyStoreWriter.write(certificate.getSerialNumber().toString() + subject.getMail(), subjectKeyPair.getPrivate(), filePass.toCharArray(), certificateChain);
         keyStoreWriter.saveKeyStore(fileName, filePass.toCharArray());
+
 
         KeyStoreAccess keyStoreAccess1 = new KeyStoreAccess();
         keyStoreAccess1.setFileName(fileName);

@@ -25,7 +25,7 @@
                         <td>{{ certificate.startDate | date: 'mediumDate'}}</td>
                         <td>{{ certificate.endDate | date: 'mediumDate' }}</td>
                         <td>
-                            <button (click)="onRevokeClicked(certificate)">Revoke</button>
+                            <button *ngIf="!certificate.revoked" (click)="onRevokeClicked(certificate)">Revoke</button>
                             
                         </td>
                         <td>

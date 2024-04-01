@@ -1,5 +1,10 @@
 <div class="container">
-    <h1>Certificate Information</h1>
+    <div class="c">
+        <h1>Certificate Information</h1>
+        <div class="icon-container">
+            <img *ngif="certificate.revoked" src="../assets/forbidden.png" alt="valid_icon">
+        </div>
+    </div>
     <p><strong>This certificate is intended for the following purpose(s):</strong></p>
     <ul>
     </ul>

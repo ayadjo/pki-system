@@ -51,8 +51,22 @@
   }
 
   .scroll-content {
-    max-height: 400px; /* Postavite maksimalnu visinu prema vašim preferencijama */
+    max-height: 380px; /* Postavite maksimalnu visinu prema vašim preferencijama */
     overflow-y: auto; /* Omogućava vertikalni scroll */
     padding-right: 20px; /* Dodaje malo prostora za scroll bar */
 }
+
+.c {
+  display: flex; /* Postavljanje na fleksibilni kontejner */
+  justify-content: space-between; /* Postavljanje rastojanja između elemenata */
+  align-items: center; /* Postavljanje vertikalnog poravnanja */
+}
+.icon-container {
+  margin-left: 20px; /* Margina sa desne strane kontejnera */
+}
+.icon-container img {
+  width: 20px;
+  height: 20px;
+}
+
   

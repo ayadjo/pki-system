@@ -170,3 +170,7 @@ input[type="checkbox"] {
   background-color: #999; /* Postavite boju pozadine na tamniju boju po vašem izboru */
   color: #fff; /* Postavite boju teksta na belu ili neku drugu kontrastnu boju */
 }
+
+.invalid-range input[type="date"] {
+  border: 2px solid red;
+}

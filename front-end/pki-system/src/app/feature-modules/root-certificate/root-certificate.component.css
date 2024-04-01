@@ -132,3 +132,7 @@ td {
 .selected {
   background-color: lightblue; /* Change to your desired background color */
 }
+
+.invalid-range input[type="date"] {
+  border: 2px solid red;
+}

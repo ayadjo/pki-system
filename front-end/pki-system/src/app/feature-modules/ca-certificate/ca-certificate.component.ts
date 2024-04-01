@@ -5,6 +5,7 @@ import { UserService } from '../user.service';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { CertificateType } from '../certificates/model/certificateDto.model';
 import { Certificate } from '../../infrastructure/auth/model/certificate.model';
+import { DateDto } from '../certificates/model/dateDto.model';
 
 
 interface KeyUsage {
@@ -28,8 +29,8 @@ export class CaCertificateComponent implements OnInit {
   users: User[] = [];
   selectedUser!: User ;
   userId: number | undefined;
-  startDate: Date | null = null;
-  endDate: Date | null = null;
+  startDate: Date = new Date();
+  endDate: Date = new Date();
   userMail: string | undefined;
   filePass: string | undefined;
   issuerCertificateSerialNumber: string | undefined;
@@ -39,6 +40,7 @@ export class CaCertificateComponent implements OnInit {
   certificates: Certificate[]= [];
   certiciateButtonSelected: Boolean;
   extendedKeyUsage: any = {};
+  dateDto: DateDto = { startDate: new Date(), endDate: new Date() }; 
 
   keyUsage: KeyUsage = {
     DIGITAL_SIGNATURE: false,
@@ -66,6 +68,7 @@ export class CaCertificateComponent implements OnInit {
        this.subjectCertificateType = CertificateType.CA;
       }
     })
+    
 
 
     //dobavljanje usera za gornju tabelu
@@ -86,9 +89,17 @@ export class CaCertificateComponent implements OnInit {
    
   }
 
+  startDateSelected() {
+    console.log('Start date selected:', this.startDate);
+  }
+
+  endDateSelected() {
+    console.log('End date selected:', this.endDate);
+  }
+
 
   onlyClientsWithoutRootCert(): void {
-    this.userService.getRootAndCA().subscribe(
+    this.userService.getRootAndCA(this.dateDto.startDate,this.dateDto.endDate).subscribe(
       (certificates: Certificate[]) => {
         // Filter out certificates with type ROOT
         const rootCertificates = certificates.filter(cert => cert.certificateType === CertificateType.ROOT);
@@ -120,7 +131,7 @@ export class CaCertificateComponent implements OnInit {
         .subscribe(
           () => {
             alert("CA certificate created successfully!");
-            this.userService.getRootAndCA().subscribe(
+            this.userService.getRootAndCA(this.dateDto.startDate,this.dateDto.endDate).subscribe(
               (certificates: Certificate[]) => {
                 this.certificates = certificates;
               },
@@ -141,11 +152,19 @@ export class CaCertificateComponent implements OnInit {
   
   chooseCertificate():void {
  //dobavljanje sertifikata za donju tabelu
-    this.certiciateButtonSelected = true;
-    this.userService.getRootAndCA()
+    this.dateDto.startDate = this.startDate;
+    this.dateDto.endDate = this.endDate;
+    
+    this.userService.getRootAndCA(this.dateDto.startDate,this.dateDto.endDate)
     .subscribe(
       (certificates: Certificate[]) => {
         this.certificates = certificates;
+        if(certificates.length == 0){
+          alert("For chosen dates cannot find valid certificates.");
+          
+        }else {
+          this.certiciateButtonSelected = true;
+        }
       },
       (error: any) => {
         console.error('Error fetching certificates:', error);
@@ -159,6 +178,18 @@ export class CaCertificateComponent implements OnInit {
 
   onCertSelect(certificate: Certificate): void {
     this.selectedCert = certificate;
+  }
+
+  isInvalidDateRange(): boolean {
+    if (!this.startDate || !this.endDate) {
+      return false; // Ako nisu izabrani oba datuma, nema nevalidnog opsega
+    }
+
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+    const today = new Date();
+
+    return start > today && end > today || start > end;
   }
 
 

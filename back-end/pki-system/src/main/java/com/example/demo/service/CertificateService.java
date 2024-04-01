@@ -24,9 +24,8 @@ import com.example.demo.model.enumerations.ExtendedKey;
 import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
 import java.security.*;
+import java.security.cert.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,9 +99,6 @@ public class CertificateService {
         return encoder.encode(password);
     }
 
-    public List<CertificateData> getAll() {
-        return certificateRepository.findAll();
-    }
 
     public ViewCerificateDto getCertificate(KeyStoreDto keyStoreDto) {
         KeyStoreReader keyStoreReader = new KeyStoreReader();
@@ -259,10 +255,18 @@ public class CertificateService {
 
 
 
-    public List<CertificateData> getRootAndCACertificates(){
+    public List<CertificateData> getRootAndCACertificates(Date startDate, Date endDate) throws CertificateNotYetValidException, CertificateExpiredException {
         List<CertificateData> certificates = new ArrayList<>();
         for(CertificateData c : certificateRepository.findAll()){
-            if(c.getCertificateType() != CertificateType.EE){
+            KeyStoreReader keyStoreReader = new KeyStoreReader();
+            KeyStoreAccess keyStore = keyStoreAccessRepository.findByFileName(c.getSerialNumber()+ ".jks");
+            String alias = c.getSerialNumber() + c.getSubjectMail();
+            if (keyStore == null) {
+                throw new IllegalArgumentException("KeyStoreAccess not found for file name: " + c.getSerialNumber()+ ".jks");
+            }
+
+            X509Certificate certificate =(X509Certificate) keyStoreReader.readCertificate(keyStore.getFileName(), keyStore.getFilePass(), alias);
+            if(c.getCertificateType() != CertificateType.EE && isDateValid(certificate, startDate, endDate)){
                 certificates.add(c);
             }
         }
@@ -270,26 +274,76 @@ public class CertificateService {
     }
 
     public List<CertificateData> findAll() {
-        return certificateRepository.findAll();
-    }
+        List<CertificateData> certificates = new ArrayList<>();
 
-
-    private boolean isValid(X509Certificate x509Certificate, PublicKey issuerPublicKey) {
-        try {
-            x509Certificate.verify(issuerPublicKey); //Verifies that this certificate was signed using the private key that corresponds to the specified public key
-            x509Certificate.checkValidity();   //proverava da li je sertifikat trenutno važeći u odnosu na trenutni datum i vreme
-        } catch (Exception e) {
-            return false; // Sertifikat nije validan
+        for (CertificateData certificate : certificateRepository.findAll()){
+            if (isChainValid(certificate.getSerialNumber(), certificate.getSubjectMail())){
+                certificates.add(certificate);
+            }
         }
-
-        return true;
+        return certificates;
     }
-    
+
+    public boolean isChainValid(String subjectSerialNumber, String subjectMail) {
+        try {
+            KeyStoreReader keyStoreReader = new KeyStoreReader();
+            String fileName = subjectSerialNumber + ".jks";
+            KeyStoreAccess keyStoreAccess = keyStoreAccessRepository.findByFileName(fileName);
+            if (keyStoreAccess == null) {
+                throw new IllegalArgumentException("KeyStoreAccess not found for file name: " + fileName);
+            }
+
+            String filePass = keyStoreAccess.getFilePass();
+            KeyStore keyStore = keyStoreReader.getKeyStore(fileName, filePass);
+            Certificate[] certificates = keyStore.getCertificateChain(subjectSerialNumber+subjectMail);
+            for(int i = 0; i < certificates.length - 1; i++) {
+                X509Certificate child = (X509Certificate) certificates[i];
+                X509Certificate parent = (X509Certificate) certificates[i+1];
+                if (!isCertificateValid(child, parent.getPublicKey())) {
+                    return false; // Ako je neki sertifikat nevalidan, odmah vraćamo false
+                }
+            }
+            X509Certificate root = (X509Certificate) certificates[certificates.length - 1];
+            return isCertificateValid(root, root.getPublicKey());
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    private boolean isCertificateValid(X509Certificate x509, PublicKey issuerPublicKey) {
+        try {
+            //KeyPair keyPair = certificateGeneratorService.generateKeyPair();
+            //x509.verify(keyPair.getPublicKey());  //za proveru potpisa, program puca
+            x509.verify(issuerPublicKey);
+            x509.checkValidity(new Date());
+            return true;
+        } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | SignatureException e) {
+            e.printStackTrace();
+            System.err.println("Greška prilikom provere validnosti sertifikata: " + e.getMessage());
+
+            return false;
+        }
+    }
+
 
     private static boolean isRootCertificate(CertificateData certificate) {
         return certificate.getCertificateType() == CertificateType.ROOT;
     }
 
+    private boolean isDateValid(X509Certificate x509Certificate, Date startDate, Date endDate) {
+        try {
+            x509Certificate.checkValidity();
+            if(x509Certificate.getNotAfter().before(startDate) || x509Certificate.getNotBefore().after(endDate)){
+                return false;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+        return  true;
+    }
 
 
 }

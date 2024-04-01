@@ -5,6 +5,7 @@ import { Certificate } from '../../infrastructure/auth/model/certificate.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../infrastructure/auth/auth.service';
 import { UserService } from '../user.service';
+import { DateDto } from '../certificates/model/dateDto.model';
 
 interface KeyUsage {
   DIGITAL_SIGNATURE: boolean;
@@ -27,8 +28,8 @@ export class EndEntityCertificateComponent implements OnInit{
   users: User[] = [];
   selectedUser!: User ;
   userId: number | undefined;
-  startDate: Date | null = null;
-  endDate: Date | null = null;
+  startDate!: Date;
+  endDate!: Date;
   userMail: string | undefined;
   filePass: string | undefined;
   issuerCertificateSerialNumber: string | undefined;
@@ -37,6 +38,7 @@ export class EndEntityCertificateComponent implements OnInit{
   selectedCert!: Certificate;
   certificates: Certificate[]= [];
   certiciateButtonSelected: Boolean;
+  dateDto!: DateDto;
 
   extendedKeyUsage: any = {};
 
@@ -86,7 +88,7 @@ export class EndEntityCertificateComponent implements OnInit{
 
 
   onlyClientsWithoutRootCert(): void {
-    this.userService.getRootAndCA().subscribe(
+    this.userService.getRootAndCA(this.dateDto.startDate,this.dateDto.endDate).subscribe(
       (certificates: Certificate[]) => {
         // Filter out certificates with type ROOT
         const rootCertificates = certificates.filter(cert => cert.certificateType === CertificateType.ROOT);
@@ -140,12 +142,17 @@ export class EndEntityCertificateComponent implements OnInit{
   
   chooseCertificate():void {
     //dobavljanje sertifikata za donju tabelu
-        this.certiciateButtonSelected = true;
         this.userService.getAllCertificates()
         .subscribe(
           (certificates: Certificate[]) => {
           this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);
-          },
+          if(certificates.length == 0){
+            alert("For chosen dates cannot find valid certificates.");
+            
+          }else {
+            this.certiciateButtonSelected = true;
+          }
+        },
           (error: any) => {
             console.error('Error fetching certificates:', error);
           }
@@ -164,4 +171,15 @@ export class EndEntityCertificateComponent implements OnInit{
   }
 
 
+  isInvalidDateRange(): boolean {
+    if (!this.startDate || !this.endDate) {
+      return false; // Ako nisu izabrani oba datuma, nema nevalidnog opsega
+    }
+
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+    const today = new Date();
+
+    return start > today && end > today || start > end;
+  }
 }

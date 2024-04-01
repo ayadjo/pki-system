@@ -72,6 +72,18 @@ export class RootCertificateComponent {
     );
   }
 
+  isInvalidDateRange(): boolean {
+    if (!this.startDate || !this.endDate) {
+      return false; // Ako nisu izabrani oba datuma, nema nevalidnog opsega
+    }
+
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+    const today = new Date();
+
+    return start > today && end > today || start > end;
+  }
+
   onCreate(): void {
     if (this.startDate && this.endDate &&  this.selectedUser.mail && this.filePass) {
       const keyUsageArray = Object.keys(this.keyUsage).filter(key => this.keyUsage[key as keyof KeyUsage]);

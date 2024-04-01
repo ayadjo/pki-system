@@ -16,8 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,7 +43,7 @@ public class CertificateController {
     @GetMapping("/all")
     public ResponseEntity<List<CertificateData>> getAllCertificates() {
 
-        List<CertificateData> certificates = certificateService.getAll();
+        List<CertificateData> certificates = certificateService.findAll();
 
         if ( certificates == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -74,20 +79,26 @@ public class CertificateController {
     }
 
 
-    @GetMapping(value = "/rootAndCA")
-    public ResponseEntity<List<CertificateData>> getRootAndCACertificates() {
+    @GetMapping("/rootAndCA/{startDate}/{endDate}")
+    public ResponseEntity<List<CertificateData>> getRootAndCACertificates(
+            @PathVariable("startDate") String startDateStr,
+            @PathVariable("endDate") String endDateStr) throws CertificateNotYetValidException, CertificateExpiredException {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate = dateFormat.parse(startDateStr);
+            Date endDate = dateFormat.parse(endDateStr);
 
-        List<CertificateData> certificates = certificateService.getRootAndCACertificates();
+            List<CertificateData> certificates = certificateService.getRootAndCACertificates(startDate, endDate);
 
-        List<CertificateData> cert = new ArrayList<>();
-        for (CertificateData u : certificates) {
-            cert.add(u);
+            List<CertificateData> cert = new ArrayList<>();
+            for (CertificateData u : certificates) {
+                cert.add(u);
+            }
+
+            return new ResponseEntity<>(cert, HttpStatus.OK);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
 
-        return new ResponseEntity<>(cert, HttpStatus.OK);
     }
-
-
-
-
-}
+    }

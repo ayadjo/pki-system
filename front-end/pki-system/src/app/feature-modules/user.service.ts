@@ -6,6 +6,7 @@ import { KeyStoreDto } from '../infrastructure/auth/model/keyStoreDto.model';
 import { ViewCertificateDto } from '../infrastructure/auth/model/viewCertificateDto.model';
 import { CertificateType } from './certificates/model/certificateDto.model';
 import { Certificate } from '../infrastructure/auth/model/certificate.model';
+import { DateDto } from './certificates/model/dateDto.model';
 
 
 @Injectable({
@@ -61,8 +62,9 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>('http://localhost:8080/users/all');
   }
-  getRootAndCA(): Observable<Certificate[]> {
-    return this.http.get<Certificate[]>('http://localhost:8080/certificates/rootAndCA');
+  getRootAndCA(startDate: Date, endDate: Date): Observable<Certificate[]> {
+    const url = `http://localhost:8080/certificates/rootAndCA/${startDate}/${endDate}`;
+    return this.http.get<Certificate[]>(url);
   }
 
   getAllCertificates(): Observable<Certificate[]> {

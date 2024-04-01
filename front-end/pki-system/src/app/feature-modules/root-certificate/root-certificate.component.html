@@ -22,7 +22,7 @@
             </tbody>
         </table>
     </div>
-    <div class="date-picker">
+    <div class="date-picker" [ngClass]="{'invalid-range': isInvalidDateRange()}">
         <label class="startDateLabel">Start Date</label>
         <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate">
         <label class="endDateLabel">End Date</label>

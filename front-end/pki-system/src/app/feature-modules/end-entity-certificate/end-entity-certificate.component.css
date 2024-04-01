@@ -156,7 +156,11 @@
     margin-right: 10px;
     margin-top: 30px;
   }
-  
+
+  .invalid-range input[type="date"] {
+    border: 2px solid red;
+  }
+
 
   .extensions {
     display: flex;

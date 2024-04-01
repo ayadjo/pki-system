@@ -4,6 +4,7 @@ import javax.security.auth.DestroyFailedException;
 import java.io.*;
 import java.security.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -11,6 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.cert.CertificateEncodingException;
+import java.io.ByteArrayInputStream;
+import java.security.KeyStoreException;
+import java.io.IOException;
 
 public class KeyStoreWriter {
     //KeyStore je Java klasa za citanje specijalizovanih datoteka koje se koriste za cuvanje kljuceva
@@ -73,6 +80,28 @@ public class KeyStoreWriter {
             e.printStackTrace();
         }
     }
+
+
+/*
+    public void setCertificateChain(String alias, Certificate[] certificateChain, Certificate subjectCertificate) {
+        try {
+            List<Certificate> newChainList = new ArrayList<>(Arrays.asList(certificateChain));
+            newChainList.add(0, subjectCertificate);
+            Collections.reverse(newChainList);
+
+            for (int i = 0; i < newChainList.size() - 1; i++) {
+                keyStore.setCertificateEntry(alias + "_" + i, newChainList.get(i));
+            }
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+
+
+
+
 
 
 

@@ -88,7 +88,7 @@ export class EndEntityCertificateComponent implements OnInit{
       this.userService.createEECertificate(this.selectedCert.subjectMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
         .subscribe(
           () => {
-            alert("CA certificate created successfully!");
+            alert("EE certificate created successfully!");
             this.userService.getAllCertificates().subscribe(
               (certificates: Certificate[]) => {
                 this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);

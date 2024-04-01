@@ -6,12 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.cert.CertificateEncodingException;
+import java.io.ByteArrayInputStream;
+import java.security.KeyStoreException;
+import java.io.IOException;
 
 public class KeyStoreWriter {
     //KeyStore je Java klasa za citanje specijalizovanih datoteka koje se koriste za cuvanje kljuceva
@@ -75,28 +82,26 @@ public class KeyStoreWriter {
         }
     }
 
-    public void writeEE(String alias, PrivateKey privateKey, char[] password, Certificate[] certificateChain) {
-        try {
-            keyStore.setKeyEntry(alias, privateKey, password, certificateChain);
-            X509Certificate certificate=(X509Certificate)keyStore.getCertificate("alias");
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-    }
 
-    /*public void setCertificateChain(String alias, Certificate[] certificateChain, Certificate subjectCertificate) {
+/*
+    public void setCertificateChain(String alias, Certificate[] certificateChain, Certificate subjectCertificate) {
         try {
             List<Certificate> newChainList = new ArrayList<>(Arrays.asList(certificateChain));
             newChainList.add(0, subjectCertificate);
             Collections.reverse(newChainList);
 
             for (int i = 0; i < newChainList.size() - 1; i++) {
-                keyStore.setCertificateEntry(alias, newChainList.get(i));
+                keyStore.setCertificateEntry(alias + "_" + i, newChainList.get(i));
             }
         } catch (KeyStoreException e) {
             e.printStackTrace();
         }
     }*/
+
+
+
+
+
 
 
 

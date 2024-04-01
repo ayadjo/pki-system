@@ -183,14 +183,10 @@ public class CertificateService {
         String fileName = certificate.getSerialNumber().toString() + ".jks";
         String filePass = hashPassword(pass);
 
-        /*KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
+        KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
         keyStoreWriter.loadKeyStore(null, filePass.toCharArray());
         assert certificateChain != null;
         //za end*entity ne cuvamo private key, pravila novi nacin cuvanja
-        keyStoreWriter.setCertificateChain(certificate.getSerialNumber().toString() + subject.getMail(), certificateChain, certificate);
-        keyStoreWriter.saveKeyStore(fileName, filePass.toCharArray());*/
-        KeyStoreWriter keyStoreWriter=new KeyStoreWriter();
-        keyStoreWriter.loadKeyStore(null, filePass.toCharArray());
         keyStoreWriter.write(certificate.getSerialNumber().toString() + subject.getMail(), subjectKeyPair.getPrivate(), filePass.toCharArray(), certificateChain);
         keyStoreWriter.saveKeyStore(fileName, filePass.toCharArray());
 

@@ -35,8 +35,9 @@ export class UserService {
     return this.http.get<User>(`http://localhost:8080/user/getByEmail/${mail}`);
   }
 
-  createRootCertificate(startDate: Date, endDate: Date, issuerMail: string, filePass: string): Observable<any> {
-    const requestBody = { startDate, endDate, issuerMail };
+  createRootCertificate(startDate: Date, endDate: Date, issuerMail: string, filePass: string, keyUsage: string[], extendedKey: string[]): Observable<any> {
+    const requestBody = { issuerMail: issuerMail, startDate: startDate, endDate: endDate, keyUsageExtension: keyUsage, extendedKey: extendedKey};
+    //const requestBody = { startDate, endDate, issuerMail, keyUsage: keyUsage.map(key => ({ key })), extendedKey };
     return this.http.post<any>(`http://localhost:8080/certificates/root-certificate/${filePass}`, requestBody);
   }
 
@@ -46,13 +47,14 @@ export class UserService {
     return this.http.get<ViewCertificateDto>(url);
   }
   
-  createCACertificate(issuerMail: string, subjectMail: string, issuerCertificateSerialNumber: string,issuerCertificateType: CertificateType, subjectCertificateType:CertificateType,  startDate:Date, endDate: Date, filePass: string): Observable<any> {
-    const requestBody = { issuerMail, subjectMail, issuerCertificateSerialNumber,issuerCertificateType,subjectCertificateType, startDate, endDate };
+  
+  createCACertificate(issuerMail: string, subjectMail: string, issuerCertificateSerialNumber: string,issuerCertificateType: CertificateType, subjectCertificateType:CertificateType,  startDate:Date, endDate: Date, filePass: string, keyUsage: string[], extendedKey: string[]): Observable<any> {
+    const requestBody = { issuerMail, subjectMail, issuerCertificateSerialNumber,issuerCertificateType,subjectCertificateType, startDate, endDate, keyUsageExtension: keyUsage, extendedKey: extendedKey};
     return this.http.post<any>(`http://localhost:8080/certificates/ca-certificate/${filePass}`, requestBody);
   }
 
-  createEECertificate(issuerMail: string, subjectMail: string, issuerCertificateSerialNumber: string,issuerCertificateType: CertificateType, subjectCertificateType:CertificateType,  startDate:Date, endDate: Date, filePass: string): Observable<any> {
-    const requestBody = { issuerMail, subjectMail, issuerCertificateSerialNumber,issuerCertificateType, subjectCertificateType, startDate, endDate };
+  createEECertificate(issuerMail: string, subjectMail: string, issuerCertificateSerialNumber: string,issuerCertificateType: CertificateType, subjectCertificateType:CertificateType,  startDate:Date, endDate: Date, filePass: string, keyUsage: string[], extendedKey: string[]): Observable<any> {
+    const requestBody = { issuerMail, subjectMail, issuerCertificateSerialNumber,issuerCertificateType, subjectCertificateType, startDate, endDate, keyUsageExtension: keyUsage, extendedKey: extendedKey };
     return this.http.post<any>(`http://localhost:8080/certificates/ee-certificate/${filePass}`, requestBody);
   }
 

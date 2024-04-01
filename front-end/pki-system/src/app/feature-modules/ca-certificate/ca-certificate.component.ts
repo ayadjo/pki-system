@@ -6,6 +6,19 @@ import { AuthService } from '../../infrastructure/auth/auth.service';
 import { CertificateType } from '../certificates/model/certificateDto.model';
 import { Certificate } from '../../infrastructure/auth/model/certificate.model';
 
+
+interface KeyUsage {
+  DIGITAL_SIGNATURE: boolean;
+  NON_REPUDIATION: boolean;
+  KEY_ENCIPHER: boolean;
+  DATA_ENCIPHER: boolean;
+  KEY_AGREEMENT: boolean;
+  CERTIFICATE_SIGNING: boolean;
+  CRL_SIGNING: boolean;
+  ENCIPHER_ONLY: boolean;
+  DECIPHER_ONLY: boolean;
+}
+
 @Component({
   selector: 'app-ca-certificate',
   templateUrl: './ca-certificate.component.html',
@@ -25,6 +38,20 @@ export class CaCertificateComponent implements OnInit {
   selectedCert!: Certificate;
   certificates: Certificate[]= [];
   certiciateButtonSelected: Boolean;
+  extendedKeyUsage: any = {};
+
+  keyUsage: KeyUsage = {
+    DIGITAL_SIGNATURE: false,
+    NON_REPUDIATION: false,
+    KEY_ENCIPHER: false,
+    DATA_ENCIPHER: false,
+    KEY_AGREEMENT: false,
+    CERTIFICATE_SIGNING: false,
+    CRL_SIGNING: false,
+    ENCIPHER_ONLY: false,
+    DECIPHER_ONLY: false,
+  };
+
 
   constructor(private route: ActivatedRoute, 
     private userService: UserService, 
@@ -87,7 +114,9 @@ export class CaCertificateComponent implements OnInit {
 
   onCreate(): void {
     if (this.startDate && this.endDate &&  this.selectedCert.issuerMail && this.filePass && this.selectedUser.mail) {
-      this.userService.createCACertificate(this.selectedCert.subjectMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass)
+      const keyUsageArray = Object.keys(this.keyUsage).filter(key => this.keyUsage[key as keyof KeyUsage]);
+      const extendedKeyArray = Object.keys(this.extendedKeyUsage).filter(key => this.extendedKeyUsage[key]);
+      this.userService.createCACertificate(this.selectedCert.issuerMail, this.selectedUser.mail, this.selectedCert.serialNumber,  this.selectedCert.certificateType, this.subjectCertificateType as CertificateType, this.startDate, this.endDate, this.filePass, keyUsageArray, extendedKeyArray)
         .subscribe(
           () => {
             alert("CA certificate created successfully!");

@@ -3,8 +3,14 @@ package com.example.demo.service;
 import com.example.demo.model.IssuerData;
 import com.example.demo.model.SubjectData;
 import com.example.demo.model.User;
+import com.example.demo.model.enumerations.ExtendedKey;
+import com.example.demo.model.enumerations.KeyUsageExtension;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
+import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -13,6 +19,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.springframework.stereotype.Service;
+import org.bouncycastle.asn1.x509.Extension;
 
 import java.math.BigInteger;
 import java.security.*;
@@ -43,6 +50,9 @@ public class CertificateGeneratorService {
                     subjectData.getX500name(),
                     subjectData.getPublicKey());
 
+            certGen.addExtension(Extension.keyUsage,false,new KeyUsage(subjectData.combineKeyUsageValues()));
+            certGen.addExtension(Extension.extendedKeyUsage,false,new ExtendedKeyUsage(subjectData.getExtendedKeyUsage()));
+
             X509CertificateHolder certHolder = certGen.build(contentSigner);
 
             JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
@@ -56,6 +66,8 @@ public class CertificateGeneratorService {
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (OperatorCreationException e) {
+            e.printStackTrace();
+        } catch (CertIOException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
             e.printStackTrace();
@@ -77,7 +89,7 @@ public class CertificateGeneratorService {
         return new IssuerData(issuerKey, builder.build());
     }
 
-    SubjectData generateSubjectData(KeyPair keyPairSubject, User subject, Date startDate, Date endDate){
+    SubjectData generateSubjectData(KeyPair keyPairSubject, User subject, Date startDate, Date endDate, Integer[] keyUsage, KeyPurposeId[] extendedKeyUsage){
         String certificateSerialNumber= generateCertificateSerialNumber();
 
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -96,6 +108,8 @@ public class CertificateGeneratorService {
         subjectData.setPublicKey(keyPairSubject.getPublic());
         subjectData.setStartDate(startDate);
         subjectData.setEndDate(endDate);
+        subjectData.setKeyUsage(keyUsage);
+        subjectData.setExtendedKeyUsage(extendedKeyUsage);
         return subjectData;
 
     }

@@ -314,6 +314,12 @@ public class CertificateService {
 
     private boolean isCertificateValid(X509Certificate x509, PublicKey issuerPublicKey) {
         try {
+            /*
+            if (x509.getRevoked() == true) {
+                return false;
+            }
+            */
+
             //KeyPair keyPair = certificateGeneratorService.generateKeyPair();
             //x509.verify(keyPair.getPublicKey());  //za proveru potpisa, program puca
             x509.verify(issuerPublicKey);

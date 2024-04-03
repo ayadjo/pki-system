@@ -356,25 +356,38 @@ public class CertificateService {
         if (certificate != null) {
             certificate.setRevoked(true);
             certificateRepository.save(certificate);
-            // Invalidate certificates signed by the revoked certificate
-            invalidateCertificatesSignedBy(certificate);
-            // Update the Certificate Revocation List (CRL)
+            invalidateCertificatesRecursive(certificate);
             updateCRL();
         } else {
             throw new IllegalArgumentException("Certificate not found with serial number: " + serialNumber);
         }
     }
 
-    private void invalidateCertificatesSignedBy(CertificateData revokedCertificate) {
-        List<CertificateData> signedCertificates = certificateRepository.findByIssuerMailAndRevokedFalse(revokedCertificate.getSubjectMail());
-        for (CertificateData signedCertificate : signedCertificates) {
-            signedCertificate.setRevoked(true);
-            certificateRepository.save(signedCertificate);
+    private void invalidateCertificatesRecursive(CertificateData revokedCertificate) {
+        List<CertificateData> certificatesToRevoke = new ArrayList<>();
+        certificatesToRevoke.add(revokedCertificate);
+
+        invalidateCertificatesBelow(revokedCertificate, certificatesToRevoke);
+
+        for (CertificateData certificateToRevoke : certificatesToRevoke) {
+            certificateToRevoke.setRevoked(true);
+            certificateRepository.save(certificateToRevoke);
         }
     }
 
+    private void invalidateCertificatesBelow(CertificateData parentCertificate, List<CertificateData> certificatesToRevoke) {
+        List<CertificateData> signedCertificates = certificateRepository.findByIssuerMailAndRevokedFalse(parentCertificate.getSubjectMail());
+
+        certificatesToRevoke.addAll(signedCertificates);
+
+        for (CertificateData signedCertificate : signedCertificates) {
+            invalidateCertificatesBelow(signedCertificate, certificatesToRevoke);
+        }
+    }
+
+
+
     private void updateCRL() {
-        // Generate or update the Certificate Revocation List (CRL) based on revoked certificates
-        // Save the CRL to a file or database
+
     }
 }

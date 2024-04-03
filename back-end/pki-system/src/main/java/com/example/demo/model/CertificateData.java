@@ -43,4 +43,11 @@ public class CertificateData {
 
     }
 
+    public void setRevoked(Boolean revoked) {
+        this.revoked = revoked;
+    }
+
+    public Boolean getRevoked() {
+        return revoked;
+    }
 }

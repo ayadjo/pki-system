@@ -51,7 +51,18 @@ export class CertificatesOverviewComponent {
   }
 
   onRevokeClicked(certificate: Certificate): void {
-    
+    if (confirm('Are you sure you want to revoke this certificate?')) {
+      this.userService.revokeCertificate(certificate.serialNumber).subscribe({
+        next: () => {
+          console.log('Certificate revoked successfully');
+          // Optionally, you can update the certificates list after revoking
+          this.getCertificates();
+        },
+        error: (error: any) => {
+          console.error('Error revoking certificate:', error);
+        }
+      });
+    }
   }
 
   onSeeMoreClicked(certificate: Certificate): void {

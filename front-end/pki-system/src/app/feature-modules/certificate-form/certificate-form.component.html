@@ -2,7 +2,7 @@
     <div class="c">
         <h1>Certificate Information</h1>
         <div class="icon-container">
-            <img *ngif="certificate.revoked" src="../assets/forbidden.png" alt="valid_icon">
+            <img *ngIf="certificate.revoked" src="../assets/forbidden.png" alt="revoked_icon">
         </div>
     </div>
     <hr>
@@ -11,6 +11,15 @@
     <ul>
         <li *ngFor="let keyUsage of certificate.keyUsages">{{ keyUsage }}</li>
     </ul>
+    <hr>
+    <div class="scroll-content">
+        <h2>Issued To</h2>
+        <p>Common Name (CN): <span>{{ certificate.subjectData.commonName }}</span></p>
+        <p>Organization (O): <span>{{ certificate.subjectData.organization }}</span></p>
+        <p>Organizational Unit (OU): <span>{{ certificate.subjectData.organizationUnit }}</span></p>
+        <p>Country (C): <span>{{ certificate.subjectData.country }}</span></p>
+        <p>Email (E): <span>{{ certificate.subjectData.mail }}</span></p>
+
     <h2>Issued To</h2>
     <p>Common Name (CN): <span>{{ certificate.subjectData.commonName }}</span></p>
     <p>Organization (O): <span>{{ certificate.subjectData.organization }}</span></p>
@@ -18,24 +27,25 @@
     <p>Country (C): <span>{{ certificate.subjectData.country }}</span></p>
     <p>Email (E): <span>{{ certificate.subjectData.mail }}</span></p>
 
-    <h2>Issued By</h2>
-    <p>Common Name (CN): <span>{{ certificate.issuerData.commonName }}</span></p>
-    <p>Organization (O): <span>{{ certificate.issuerData.organization }}</span></p>
-    <p>Organizational Unit (OU): <span>{{ certificate.issuerData.organizationUnit }}</span></p>
-    <p>Country (C): <span>{{ certificate.issuerData.country }}</span></p>
-    <p>Email (E): <span>{{ certificate.issuerData.mail }}</span></p>
 
-    <h2>Period of Validity</h2>
-    <p>Begins On: <span>{{ certificate.startDate | date: 'mediumDate' }}</span></p>
-    <p>Expires On: <span>{{ certificate.endDate | date: 'mediumDate' }}</span></p>
+        <h2>Issued By</h2>
+        <p>Common Name (CN): <span>{{ certificate.issuerData.commonName }}</span></p>
+        <p>Organization (O): <span>{{ certificate.issuerData.organization }}</span></p>
+        <p>Organizational Unit (OU): <span>{{ certificate.issuerData.organizationUnit }}</span></p>
+        <p>Country (C): <span>{{ certificate.issuerData.country }}</span></p>
+        <p>Email (E): <span>{{ certificate.issuerData.mail }}</span></p>
 
-    <p>Serial Number: <span>{{ certificate.serialNumber }}</span></p>
-    <p>Certificate Type: <span>{{ certificate.certificateType }}</span></p>
+        <h2>Period of Validity</h2>
+        <p>Begins On: <span>{{ certificate.startDate | date: 'mediumDate' }}</span></p>
+        <p>Expires On: <span>{{ certificate.endDate | date: 'mediumDate' }}</span></p>
+
+        <p>Serial Number: <span>{{ certificate.serialNumber }}</span></p>
+        <p>Certificate Type: <span>{{ certificate.certificateType }}</span></p>
     </div>
     <hr>
 
     <div style="margin-top: 20px;">
         <img src="../assets/medal.png" alt="valid_icon" width="20" height="20">
-        <span>This Certificate is valid</span>
+        <span>{{ certificate.revoked ? 'This Certificate has been Revoked' : 'This Certificate is valid' }}</span>
     </div>
 </div>

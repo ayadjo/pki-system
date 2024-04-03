@@ -101,4 +101,15 @@ public class CertificateController {
         }
 
     }
+
+    @PutMapping("/revoke/{serialNumber}")
+    public ResponseEntity<String> revokeCertificate(@PathVariable String serialNumber) {
+        try {
+            certificateService.revokeCertificate(serialNumber);
+            return new ResponseEntity<>("Certificate with serial number " + serialNumber + " revoked successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
+
+}

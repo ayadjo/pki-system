@@ -314,6 +314,12 @@ public class CertificateService {
 
     private boolean isCertificateValid(X509Certificate x509, PublicKey issuerPublicKey) {
         try {
+            /*
+            if (x509.getRevoked() == true) {
+                return false;
+            }
+            */
+
             //KeyPair keyPair = certificateGeneratorService.generateKeyPair();
             //x509.verify(keyPair.getPublicKey());  //za proveru potpisa, program puca
             x509.verify(issuerPublicKey);
@@ -345,5 +351,43 @@ public class CertificateService {
         return  true;
     }
 
+    public void revokeCertificate(String serialNumber) {
+        CertificateData certificate = certificateRepository.getById(serialNumber);
+        if (certificate != null) {
+            certificate.setRevoked(true);
+            certificateRepository.save(certificate);
+            invalidateCertificatesRecursive(certificate);
+            updateCRL();
+        } else {
+            throw new IllegalArgumentException("Certificate not found with serial number: " + serialNumber);
+        }
+    }
 
+    private void invalidateCertificatesRecursive(CertificateData revokedCertificate) {
+        List<CertificateData> certificatesToRevoke = new ArrayList<>();
+        certificatesToRevoke.add(revokedCertificate);
+
+        invalidateCertificatesBelow(revokedCertificate, certificatesToRevoke);
+
+        for (CertificateData certificateToRevoke : certificatesToRevoke) {
+            certificateToRevoke.setRevoked(true);
+            certificateRepository.save(certificateToRevoke);
+        }
+    }
+
+    private void invalidateCertificatesBelow(CertificateData parentCertificate, List<CertificateData> certificatesToRevoke) {
+        List<CertificateData> signedCertificates = certificateRepository.findByIssuerMailAndRevokedFalse(parentCertificate.getSubjectMail());
+
+        certificatesToRevoke.addAll(signedCertificates);
+
+        for (CertificateData signedCertificate : signedCertificates) {
+            invalidateCertificatesBelow(signedCertificate, certificatesToRevoke);
+        }
+    }
+
+
+
+    private void updateCRL() {
+
+    }
 }

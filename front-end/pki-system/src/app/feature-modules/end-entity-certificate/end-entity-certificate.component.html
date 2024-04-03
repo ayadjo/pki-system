@@ -51,7 +51,7 @@
             <ng-container *ngFor="let cert of certificates">
                 <tr (click)="cert.certificateType !== 'EE' && onCertSelect(cert)" 
                     [class.selected]="cert === selectedCert"
-                    [class.duplicate]="cert.issuerMail === selectedUser.mail || cert.subjectMail === selectedUser.mail " 
+                    [class.duplicate]="cert.issuerMail === selectedUser.mail || cert.subjectMail === selectedUser.mail || cert.revoked" 
                     [class.disabled]="cert.certificateType === 'EE'">
                     <td>{{ cert.certificateType }}</td>
                     <td>{{ cert.issuerMail }}</td>

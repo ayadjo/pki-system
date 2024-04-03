@@ -5,11 +5,12 @@
             <img *ngif="certificate.revoked" src="../assets/forbidden.png" alt="valid_icon">
         </div>
     </div>
-    <p><strong>This certificate is intended for the following purpose(s):</strong></p>
-    <ul>
-    </ul>
     <hr>
     <div class="scroll-content">
+    <p><strong>This certificate is intended for the following purpose(s):</strong></p>
+    <ul>
+        <li *ngFor="let keyUsage of certificate.keyUsages">{{ keyUsage }}</li>
+    </ul>
     <h2>Issued To</h2>
     <p>Common Name (CN): <span>{{ certificate.subjectData.commonName }}</span></p>
     <p>Organization (O): <span>{{ certificate.subjectData.organization }}</span></p>

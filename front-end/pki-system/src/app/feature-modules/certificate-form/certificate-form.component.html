@@ -5,8 +5,11 @@
             <img *ngIf="certificate.revoked" src="../assets/forbidden.png" alt="revoked_icon">
         </div>
     </div>
+    <hr>
+    <div class="scroll-content">
     <p><strong>This certificate is intended for the following purpose(s):</strong></p>
     <ul>
+        <li *ngFor="let keyUsage of certificate.keyUsages">{{ keyUsage }}</li>
     </ul>
     <hr>
     <div class="scroll-content">
@@ -16,6 +19,14 @@
         <p>Organizational Unit (OU): <span>{{ certificate.subjectData.organizationUnit }}</span></p>
         <p>Country (C): <span>{{ certificate.subjectData.country }}</span></p>
         <p>Email (E): <span>{{ certificate.subjectData.mail }}</span></p>
+
+    <h2>Issued To</h2>
+    <p>Common Name (CN): <span>{{ certificate.subjectData.commonName }}</span></p>
+    <p>Organization (O): <span>{{ certificate.subjectData.organization }}</span></p>
+    <p>Organizational Unit (OU): <span>{{ certificate.subjectData.organizationUnit }}</span></p>
+    <p>Country (C): <span>{{ certificate.subjectData.country }}</span></p>
+    <p>Email (E): <span>{{ certificate.subjectData.mail }}</span></p>
+
 
         <h2>Issued By</h2>
         <p>Common Name (CN): <span>{{ certificate.issuerData.commonName }}</span></p>

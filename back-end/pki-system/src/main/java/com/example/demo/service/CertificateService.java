@@ -345,5 +345,30 @@ public class CertificateService {
         return  true;
     }
 
+    public void revokeCertificate(String serialNumber) {
+        CertificateData certificate = certificateRepository.getById(serialNumber);
+        if (certificate != null) {
+            certificate.setRevoked(true);
+            certificateRepository.save(certificate);
+            // Invalidate certificates signed by the revoked certificate
+            invalidateCertificatesSignedBy(certificate);
+            // Update the Certificate Revocation List (CRL)
+            updateCRL();
+        } else {
+            throw new IllegalArgumentException("Certificate not found with serial number: " + serialNumber);
+        }
+    }
 
+    private void invalidateCertificatesSignedBy(CertificateData revokedCertificate) {
+        List<CertificateData> signedCertificates = certificateRepository.findByIssuerMailAndRevokedFalse(revokedCertificate.getSubjectMail());
+        for (CertificateData signedCertificate : signedCertificates) {
+            signedCertificate.setRevoked(true);
+            certificateRepository.save(signedCertificate);
+        }
+    }
+
+    private void updateCRL() {
+        // Generate or update the Certificate Revocation List (CRL) based on revoked certificates
+        // Save the CRL to a file or database
+    }
 }

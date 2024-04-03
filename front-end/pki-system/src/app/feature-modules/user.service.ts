@@ -71,6 +71,8 @@ export class UserService {
     return this.http.get<Certificate[]>('http://localhost:8080/certificates/all');
   }
 
-
+  revokeCertificate(serialNumber: string): Observable<any> {
+    return this.http.put<any>(`http://localhost:8080/certificates/revoke/${serialNumber}`, {});
+  }
   
 }

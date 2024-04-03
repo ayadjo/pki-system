@@ -7,12 +7,11 @@
     </div>
     <hr>
     <div class="scroll-content">
-    <p><strong>This certificate is intended for the following purpose(s):</strong></p>
+        <p><strong>This certificate is intended for the following purpose(s):</strong></p>
     <ul>
         <li *ngFor="let keyUsage of certificate.keyUsages">{{ keyUsage }}</li>
     </ul>
     <hr>
-    <div class="scroll-content">
         <h2>Issued To</h2>
         <p>Common Name (CN): <span>{{ certificate.subjectData.commonName }}</span></p>
         <p>Organization (O): <span>{{ certificate.subjectData.organization }}</span></p>
@@ -41,9 +40,8 @@
 
         <p>Serial Number: <span>{{ certificate.serialNumber }}</span></p>
         <p>Certificate Type: <span>{{ certificate.certificateType }}</span></p>
-    </div>
     <hr>
-
+    </div>
     <div style="margin-top: 20px;">
         <img src="../assets/medal.png" alt="valid_icon" width="20" height="20">
         <span>{{ certificate.revoked ? 'This Certificate has been Revoked' : 'This Certificate is valid' }}</span>

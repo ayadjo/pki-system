@@ -24,7 +24,7 @@
     </div>
     <div class="date-picker" [ngClass]="{'invalid-range': isInvalidDateRange()}">
         <label class="startDateLabel">Start Date</label>
-        <input type="date" id="startDate" name="startDate" class="startDate" [(ngModel)]="startDate">
+        <input disabled [value]="startDate | date: 'mediumDate'"  class="startDate"><br><br>
         <label class="endDateLabel">End Date</label>
         <input type="date" id="endDate" name="endDate" class="endDate" [(ngModel)]="endDate">
     </div>  

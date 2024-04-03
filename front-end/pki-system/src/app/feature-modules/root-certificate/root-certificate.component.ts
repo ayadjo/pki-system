@@ -24,8 +24,8 @@ interface KeyUsage {
 })
 
 export class RootCertificateComponent {
-  startDate: Date | null = null;
-  endDate: Date | null = null;
+  startDate: Date = new Date();
+  endDate!: Date;
   userId!: number;
   userMail: string | undefined;
   filePass: string | undefined;
@@ -92,6 +92,7 @@ export class RootCertificateComponent {
         .subscribe(
           () => {
             alert("Root certificate created successfully!");
+            this.router.navigate(['/certificates-overview']);
           },
           (error: any) => {
             alert("Something went wrong while creating your root certificate. Please try again later.");

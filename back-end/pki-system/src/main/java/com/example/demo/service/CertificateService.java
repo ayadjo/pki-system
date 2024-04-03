@@ -341,7 +341,7 @@ public class CertificateService {
     private boolean isDateValid(X509Certificate x509Certificate, Date startDate, Date endDate) {
         try {
             x509Certificate.checkValidity();
-            if(x509Certificate.getNotAfter().before(startDate) || x509Certificate.getNotBefore().after(endDate)){
+            if(x509Certificate.getNotAfter().before(endDate) || x509Certificate.getNotBefore().after(startDate)){
                 return false;
             }
 

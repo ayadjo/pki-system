@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -84,8 +85,9 @@ public class CertificateController {
             @PathVariable("startDate") String startDateStr,
             @PathVariable("endDate") String endDateStr) throws CertificateNotYetValidException, CertificateExpiredException {
         try {
+            SimpleDateFormat startFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (z)", Locale.ENGLISH);
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date startDate = dateFormat.parse(startDateStr);
+            Date startDate = startFormat.parse(startDateStr);
             Date endDate = dateFormat.parse(endDateStr);
 
             List<CertificateData> certificates = certificateService.getRootAndCACertificates(startDate, endDate);

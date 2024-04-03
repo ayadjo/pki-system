@@ -28,7 +28,7 @@ export class EndEntityCertificateComponent implements OnInit{
   users: User[] = [];
   selectedUser!: User ;
   userId: number | undefined;
-  startDate!: Date;
+  startDate: Date = new Date();
   endDate!: Date;
   userMail: string | undefined;
   filePass: string | undefined;
@@ -65,6 +65,7 @@ export class EndEntityCertificateComponent implements OnInit{
       if (user.id != 0) {
         this.userId = user.id;   
         this.subjectCertificateType = CertificateType.EE;
+        
       }
     })
 
@@ -120,7 +121,8 @@ export class EndEntityCertificateComponent implements OnInit{
         .subscribe(
           () => {
             alert("EE certificate created successfully!");
-            this.userService.getAllCertificates().subscribe(
+            this.router.navigate(['/certificates-overview']);
+            this.userService.getRootAndCA(this.startDate, this.endDate).subscribe(
               (certificates: Certificate[]) => {
                 this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);
               },
@@ -142,7 +144,7 @@ export class EndEntityCertificateComponent implements OnInit{
   
   chooseCertificate():void {
     //dobavljanje sertifikata za donju tabelu
-        this.userService.getAllCertificates()
+        this.userService.getRootAndCA(this.startDate, this.endDate)
         .subscribe(
           (certificates: Certificate[]) => {
           this.certificates = certificates.filter(cert => cert.certificateType === CertificateType.CA || cert.certificateType === CertificateType.EE);

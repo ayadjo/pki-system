@@ -131,6 +131,7 @@ export class CaCertificateComponent implements OnInit {
         .subscribe(
           () => {
             alert("CA certificate created successfully!");
+            this.router.navigate(['/certificates-overview']);
             this.userService.getRootAndCA(this.dateDto.startDate,this.dateDto.endDate).subscribe(
               (certificates: Certificate[]) => {
                 this.certificates = certificates;

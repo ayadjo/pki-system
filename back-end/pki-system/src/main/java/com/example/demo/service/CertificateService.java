@@ -266,7 +266,7 @@ public class CertificateService {
             }
 
             X509Certificate certificate =(X509Certificate) keyStoreReader.readCertificate(keyStore.getFileName(), keyStore.getFilePass(), alias);
-            if(c.getCertificateType() != CertificateType.EE && isDateValid(certificate, startDate, endDate)){
+            if(c.getCertificateType() != CertificateType.EE && isDateValid(certificate, startDate, endDate) && !c.getRevoked()){
                 certificates.add(c);
             }
         }

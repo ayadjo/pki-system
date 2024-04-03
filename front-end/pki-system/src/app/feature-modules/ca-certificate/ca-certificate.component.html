@@ -49,7 +49,7 @@
             <tr *ngFor="let cert of certificates" 
                 (click)="onCertSelect(cert)" 
                 [class.selected]="cert === selectedCert"
-                [class.duplicate]="cert.issuerMail === selectedUser.mail || cert.subjectMail === selectedUser.mail ">
+                [class.duplicate]="cert.issuerMail === selectedUser.mail || cert.subjectMail === selectedUser.mail || cert.revoked">
                 <td>{{ cert.certificateType }}</td>
                 <td>{{ cert.issuerMail }}</td>
                 <td>{{ cert.subjectMail }}</td>                   

@@ -111,7 +111,7 @@ public class CertificateService {
 
         X509Certificate certificate =(X509Certificate) keyStoreReader.readCertificate(keyStore.getFileName(), keyStore.getFilePass(), alias);
         CertificateData certificateData = certificateRepository.getById(certificate.getSerialNumber().toString());
-        ViewCerificateDto certificateDto = new ViewCerificateDto(certificate, certificateData.getCertificateType(), certificateData.getRevoked());
+        ViewCerificateDto certificateDto = new ViewCerificateDto(certificate, certificateData.getCertificateType(), certificateData.getRevoked(), certificateData.getKeyUsages());
 
         return certificateDto;
     }

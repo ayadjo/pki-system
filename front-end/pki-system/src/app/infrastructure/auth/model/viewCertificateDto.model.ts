@@ -10,6 +10,5 @@ export interface ViewCertificateDto{
     endDate: Date,
     certificateType: CertificateType,
     revoked: boolean
-    //keyUsages
-    //extendedKeyUsages
+    keyUsages: String[];
 }

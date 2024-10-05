@@ -1,5 +1,5 @@
 # Application images
-![root-certificate](./assets/root-certificat.png)
+![root-certificate](./assets/root-certificate.png)
 ![ca-certificate](./assets/ca-certificate.png)
 ![certificates](./assets/certificates.png)
 ![certificate-information](./assets/certificate-information.png)
